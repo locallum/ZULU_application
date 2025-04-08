@@ -14,8 +14,7 @@ const visualisationURL = 'https://f8jc59emd2.execute-api.us-east-1.amazonaws.com
 app.get('/retrieve/singleSuburb', async (req, res) => {
     const { suburb, startYear, endYear } = req.query;
     try {
-        const response = await axios.get(
-            retrievalURL,
+        const response = await axios.get(retrievalURL,
             {
                 params: { suburb, startYear, endYear }
             }
@@ -31,8 +30,7 @@ app.get('/retrieve/singleSuburb', async (req, res) => {
 app.get('/retrieve/multipleSuburbs', async (req, res) => {
     const { suburbs, startYear, endYear } = req.query;
     try {
-        const response = await axios.get(
-            retrievalURL,
+        const response = await axios.get(retrievalURL,
             {
                 params: { suburbs, startYear, endYear }
             }
