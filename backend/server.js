@@ -6,19 +6,19 @@ const app = express();
 app.use(cors());
 
 const port = process.env.PORT || 3000;
-const retrievalURL = 'https://slzykzeusf.execute-api.us-east-1.amazonaws.com/prod/population/v1';
-const visualisationURL = 'https://f8jc59emd2.execute-api.us-east-1.amazonaws.com/dev/population/visualisation/v1';
+const retrievalSingleURL = 'https://slzykzeusf.execute-api.us-east-1.amazonaws.com/prod/population/v1';
+const retrievalMultipleURL = 'https://slzykzeusf.execute-api.us-east-1.amazonaws.com/prod/populations/v1';
+const visualisationSingleURL = 'https://f8jc59emd2.execute-api.us-east-1.amazonaws.com/dev/population/visualisation/v1';
+const visualisationMultipleURL = 'https://f8jc59emd2.execute-api.us-east-1.amazonaws.com/dev/populations/visualisation/v1';
 
 // Single suburb retrieval route
 // successful URL: https://slzykzeusf.execute-api.us-east-1.amazonaws.com/prod/population/v1?startYear=2021&endYear=2066&suburb=Liverpool
 app.get('/retrieve/singleSuburb', async (req, res) => {
     const { suburb, startYear, endYear } = req.query;
     try {
-        const response = await axios.get(retrievalURL,
-            {
-                params: { suburb, startYear, endYear }
-            }
-        );
+        const response = await axios.get(retrievalSingleURL, {
+            params: { suburb, startYear, endYear }
+        });
         res.json(response.data);
     } catch (error) {
         res.status(500).send('Error fetching data from retrieval API');
@@ -30,11 +30,9 @@ app.get('/retrieve/singleSuburb', async (req, res) => {
 app.get('/retrieve/multipleSuburbs', async (req, res) => {
     const { suburbs, startYear, endYear } = req.query;
     try {
-        const response = await axios.get(retrievalURL,
-            {
-                params: { suburbs, startYear, endYear }
-            }
-        );
+        const response = await axios.get(retrievalMultipleURL, {
+            params: { suburbs, startYear, endYear }
+        });
         res.json(response.data);
     } catch (error) {
         res.status(500).send('Error fetching data from retrieval API');
@@ -47,7 +45,7 @@ app.get('/visualisation/singleSuburb', async (req, res) => {
     const { title, x_header, y_header, x_data, y_data } = req.query;
     
     try {
-        const response = await axios.get(visualisationURL, {
+        const response = await axios.get(visualisationSingleURL, {
             params: {
                 "graphTitle": title,
                 "x-header": x_header,
@@ -67,7 +65,7 @@ app.get('/visualisation/singleSuburb', async (req, res) => {
 app.get('/visualisation/multipleSuburbs', async (req, res) => {
     const { title, x_header, y_header, labels, x_data, y_data } = req.query;
     try {
-        const response = await axios.get(visualisationURL, {
+        const response = await axios.get(visualisationMultipleURL, {
             params: {
                 "graphTitle": title,
                 "x-header": x_header,
