@@ -81,6 +81,10 @@ app.get('/visualisation/multipleSuburbs', async (req, res) => {
     }
 });
 
+app.get('/', (req, res) => {
+    res.send('Welcome to the ZULU application backend!');
+});
+
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
