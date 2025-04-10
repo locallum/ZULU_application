@@ -1,0 +1,12 @@
+.marker {
+    cursor: pointer;
+    width: 16px;
+    height: 10px;
+    background-color: lightblue;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+}
+
+.marker:hover {
+    background-color: #1565c0;
+}

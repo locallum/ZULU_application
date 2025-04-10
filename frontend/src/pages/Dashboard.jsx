@@ -1,5 +1,6 @@
 import Grid from "@mui/material/Grid";
 import GraphBox from "../components/GraphBox";
+import MapboxMap from "../components/MapboxMap";
 
 /**
  * The dashboard screen displays all main website content.
@@ -7,19 +8,8 @@ import GraphBox from "../components/GraphBox";
 const Dashboard = () => {
   return (
     <>
-      <div className="page-contents">
-        <h1>
-          Population Data Projection
-        </h1>
-        <Grid container spacing={2} sx={{ width: '100%', flexGrow: 1 }}>
-          <Grid size={4}>
-            <div>Form</div>
-          </Grid>
-          <Grid size={8}>
-            <GraphBox />
-          </Grid>
-        </Grid>
-      </div>
+        
+        <MapboxMap />   
     </>
   );
 };
