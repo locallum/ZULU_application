@@ -11,7 +11,6 @@ const GraphBox = () => {
     justifyContent: "center",
     alignItems: "center",
     padding: "10px",
-    boxSizing: "border-box",
   };
 
   return (
