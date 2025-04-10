@@ -1,27 +1,24 @@
-// import { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 
 // Import components and pages
-import Header from './components/Header';
+import Layout from './layout/Layout';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 
 function App() {
+  document.title = 'ZULU UrbanMetrics';
+
   return (
-    <>
-      <BrowserRouter>
-        <Header />
-
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/login" element={<Login />}
-          />
-        </Routes>
-
-      </BrowserRouter>
-    </>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route path="/login" element={<Login />} />
+          <Route index element={<Dashboard />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;
