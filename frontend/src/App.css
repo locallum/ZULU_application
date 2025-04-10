@@ -1,4 +1,4 @@
-/* Layout */
+/* App layout and component styles */
 
 .page {
   min-height: 100vh;
@@ -6,12 +6,15 @@
   position: relative;
 }
 
-/* Header */
+/* All direct children of .page */
+.page > * {
+  padding: 1rem 4rem;
+}
+
 .header-container {
-  background-color: #14203CFA;
+  background-color: #1565c0;
   color: white;
   min-height: 8vh;
-  padding: 1rem 2rem;
   gap: 1.5rem;
   display: flex;
   flex-direction: row;
@@ -20,12 +23,16 @@
 }
 
 .page-contents {
-  box-sizing: border-box;
-  min-height: 75vh;
+  min-height: 92vh;
   width: 100%;
   padding: 4rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
+  gap: 2rem;
+}
+
+/* All direct children of .page-contents */
+.page-contents > * {
+  width: 100%;
 }
