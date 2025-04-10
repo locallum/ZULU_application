@@ -15,11 +15,17 @@
   background-color: #1565c0;
   color: white;
   min-height: 8vh;
-  gap: 1.5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.nav-container {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
+  gap: 1rem;
 }
 
 .page-contents {
