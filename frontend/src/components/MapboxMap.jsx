@@ -16,32 +16,34 @@ const MapboxMap = () => {
             pitch: 60,
             zoom: 10,
         });
-      
+
         map.scrollZoom.disable();
         map.boxZoom.disable();
         map.doubleClickZoom.disable();
         map.touchZoomRotate.disable();
-        
+
         const el = document.createElement('div');
         el.className = 'marker';
+        el.addEventListener('click', () => {
+            el.classList.toggle('marker-selected');
+        });
 
         const innerWest = new mapboxgl.Marker(el)
             .setLngLat([151.157, -33.883])
             .addTo(map);
-        
-        return () => map.remove();
-}, []);
 
-  return (
-    <div
-        ref={mapContainerRef}
-        style={{
-            width: "100vw",
-            height: "90.2vh",
-            
-        }}
-    />
-  );
+        return () => map.remove();
+    }, []);
+
+    return (
+        <div
+            ref={mapContainerRef}
+            style={{
+                width: "100vw",
+                height: "90.2vh",
+            }}
+        />
+    );
 };
 
 export default MapboxMap;
