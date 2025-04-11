@@ -1,4 +1,5 @@
 import Grid from "@mui/material/Grid";
+import GraphForm from "../components/GraphForm";
 import GraphBox from "../components/GraphBox";
 import MapboxMap from "../components/MapboxMap";
 
