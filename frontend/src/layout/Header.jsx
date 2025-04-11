@@ -18,14 +18,14 @@ const Header = () => {
     <header className="header-container">
         <h2>ZULU Urban Metrics</h2>
 
-        <nav className="nav-container">
+        <nav className="flex-row">
           <TextButton variant="text" component={Link} to="/">
             Dashboard
           </TextButton>
           <TextButton variant="text" href="https://app.swaggerhub.com/apis/zulu-89f/Zulu_transport_API/1.0.0">
             Swagger API
           </TextButton>
-          <Button variant="contained" component={Link} to="/">
+          <Button variant="contained" component={Link} to="/login">
             Login
           </Button>
         </nav>
