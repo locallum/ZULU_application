@@ -194,6 +194,9 @@ function newMarker(name, lng, lat, map) {
 
     el.addEventListener('click', () => {
         el.classList.toggle('marker-selected');
+        const suburb = document.createElement('p');
+        suburb.textContent = name;
+        document.getElementById('suburb-select').appendChild(suburb);
     });
 
     new mapboxgl.Marker(el)
