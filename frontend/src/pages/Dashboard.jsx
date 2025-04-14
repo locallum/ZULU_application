@@ -4,25 +4,47 @@ import MapboxMap from "../components/MapboxMap";
 import "./Dashboard.css";
 
 const Dashboard = () => {
-  let selectedSuburbs = [];
+  const [selected, setSelected] = useState([]);
   const [isMultiple, setIsMultiple] = useState(false);
 
-  const changeSelectedSuburbs = (event, value) => {
-    if (isMultiple) {
-      selectedSuburbs = value;
-    } else {
-      selectedSuburbs.push = [value];
-    }
-  }
+  const addSelected = (newValue) => {
+    setIsMultiple((prevIsMultiple) => {
+      if (prevIsMultiple) {
+        setSelected((prevSelected) => {
+          if (!prevSelected.includes(newValue) && prevSelected.length < 3) {
+            return [...prevSelected, newValue];
+          }
+          return prevSelected;
+        });
+      } else {
+        setSelected([newValue]);
+      }
+      return prevIsMultiple;
+    });
+  };
+
+  const removeSelected = (valueToRemove) => {
+    setSelected((prevSelected) => {
+      return prevSelected.filter((value) => value !== valueToRemove);
+    });
+  };
+
+  useEffect(() => {
+    console.log(isMultiple);
+  }, [isMultiple]);
+
+  useEffect(() => {
+    console.log(selected);
+  }, [selected]);
 
   return (
     <>
-      <GraphBox
-        isMultiple={isMultiple}
-        setIsMultiple={setIsMultiple}
-        changeSelectedSuburbs={changeSelectedSuburbs}
-      />{" "}
-      <MapboxMap />
+      <GraphBox isMultiple={isMultiple} setIsMultiple={setIsMultiple} />
+      <MapboxMap
+        selected={selected}
+        addSelected={addSelected}
+        removeSelected={removeSelected}
+      />
     </>
   );
 };

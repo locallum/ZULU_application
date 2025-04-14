@@ -194,7 +194,7 @@ const markerSelected = {
   backgroundColor: "#1565c0",
 };
 
-const MapboxMap = ({ handleChange, selectedSuburbs }) => {
+const MapboxMap = ({ selected, addSelected, removeSelected }) => {
   const mapContainerRef = useRef(null);
 
   function newMarker(name, lng, lat, map) {
@@ -218,11 +218,10 @@ const MapboxMap = ({ handleChange, selectedSuburbs }) => {
 
     el.addEventListener("click", () => {
       el.selected = !el.selected;
-      
       if (el.selected) {
-        Object.assign(el.style, markerStyle, markerSelected);
+        addSelected(name);
       } else {
-        Object.assign(el.style, markerStyle);
+        removeSelected(name);
       }
     });
 

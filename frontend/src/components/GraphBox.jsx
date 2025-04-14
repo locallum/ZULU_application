@@ -6,7 +6,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import options from "../assets/SuburbOptions";
 
-const GraphBox = ({ selectedSuburbs, isMultiple, handleChange, setIsMultiple }) => {
+const GraphBox = ({ isMultiple, setIsMultiple }) => {
   const graphBoxStyle = {
     position: "absolute",
     top: "100px",
@@ -35,33 +35,7 @@ const GraphBox = ({ selectedSuburbs, isMultiple, handleChange, setIsMultiple }) 
           />
           <Typography>Multiple</Typography>
         </Stack>
-
-        <Autocomplete
-          value={selectedSuburbs}
-          multiple={isMultiple}
-          options={options}
-          onChange={handleChange}
-          renderTags={
-            isMultiple
-              ? (value, getTagProps) =>
-                  value.map((option, index) => (
-                    <Chip
-                      key={option}
-                      label={option}
-                      {...getTagProps({ index })}
-                    />
-                  ))
-                  : undefined 
-          }
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              variant="outlined"
-              label="Select Suburbs"
-              placeholder="Start typing..."
-            />
-          )}
-        />
+        
       </FormControl>
     </div>
   );
