@@ -1,24 +1,69 @@
-/**
- * GraphBox displays a graph visualisation of retrieved data.
- */
-const GraphBox = () => {
-  // CSS styling for GraphBox
+import FormControl from "@mui/material/FormControl";
+import React, { useState } from "react";
+import { TextField, Autocomplete, Chip } from "@mui/material";
+import Switch from "@mui/material/Switch";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import options from "../assets/SuburbOptions";
+
+const GraphBox = ({ selectedSuburbs, isMultiple, handleChange, setIsMultiple }) => {
   const graphBoxStyle = {
-    height: "100%",
-    border: "1px black solid",
-    borderRadius: "10px",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: "10px",
+    position: "absolute",
+    top: "100px",
+    left: "auto",
+    right: "30px",
+    width: "360px",
+    height: "550px",
+    background: "grey",
+    zIndex: "999",
+    borderRadius: "20px",
+    opacity: "80%",
+    boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.75)",
   };
 
   return (
-    <>
-      <div style={graphBoxStyle}>
-        Graph box
-      </div>
-    </>
+    <div style={graphBoxStyle}>
+      <FormControl fullWidth>
+        <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+          <Typography>Single</Typography>
+          <Switch
+            checked={isMultiple}
+            onChange={(e) => {
+              setIsMultiple(e.target.checked);
+            }}
+            inputProps={{ "aria-label": "select mode" }}
+          />
+          <Typography>Multiple</Typography>
+        </Stack>
+
+        <Autocomplete
+          value={selectedSuburbs}
+          multiple={isMultiple}
+          options={options}
+          onChange={handleChange}
+          renderTags={
+            isMultiple
+              ? (value, getTagProps) =>
+                  value.map((option, index) => (
+                    <Chip
+                      key={option}
+                      label={option}
+                      {...getTagProps({ index })}
+                    />
+                  ))
+                  : undefined 
+          }
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              variant="outlined"
+              label="Select Suburbs"
+              placeholder="Start typing..."
+            />
+          )}
+        />
+      </FormControl>
+    </div>
   );
 };
 

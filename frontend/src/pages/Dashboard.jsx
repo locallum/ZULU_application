@@ -1,17 +1,28 @@
-import Grid from "@mui/material/Grid";
-import GraphForm from "../components/GraphForm";
+import { useEffect, useState } from "react";
 import GraphBox from "../components/GraphBox";
 import MapboxMap from "../components/MapboxMap";
 import "./Dashboard.css";
 
-/**
- * The dashboard screen displays all main website content.
- */
 const Dashboard = () => {
+  let selectedSuburbs = [];
+  const [isMultiple, setIsMultiple] = useState(false);
+
+  const changeSelectedSuburbs = (event, value) => {
+    if (isMultiple) {
+      selectedSuburbs = value;
+    } else {
+      selectedSuburbs.push = [value];
+    }
+  }
+
   return (
-      <>
-        <div id="suburb-select"></div>
-        <MapboxMap />
+    <>
+      <GraphBox
+        isMultiple={isMultiple}
+        setIsMultiple={setIsMultiple}
+        changeSelectedSuburbs={changeSelectedSuburbs}
+      />{" "}
+      <MapboxMap />
     </>
   );
 };
