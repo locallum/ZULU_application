@@ -190,15 +190,29 @@ const markerStyle = {
   transition: "background-color 0.3s",
 };
 
-const markerSelected = {
-  backgroundColor: "#1565c0",
-};
-
 const MapboxMap = ({ selected, addSelected, removeSelected }) => {
   const mapContainerRef = useRef(null);
+  const selectedRef = useRef(selected);
+
+  useEffect(() => {
+    selectedRef.current = selected;
+  }, [selected]);
+
+  useEffect(() => {
+    const markers = document.querySelectorAll('.mapboxgl-marker');
+    markers.forEach((marker) => {
+      const markerName = marker.id;
+      if (selected.includes(markerName)) {
+        marker.style.backgroundColor = "#1565c0";
+      } else {
+        marker.style.backgroundColor = "white";
+      }
+    })
+  }, [selected]);
 
   function newMarker(name, lng, lat, map) {
     const el = document.createElement("div");
+    el.id = name;
     Object.assign(el.style, markerStyle);
 
     const popup = new mapboxgl.Popup({
@@ -218,10 +232,10 @@ const MapboxMap = ({ selected, addSelected, removeSelected }) => {
 
     el.addEventListener("click", () => {
       el.selected = !el.selected;
-      if (el.selected) {
-        addSelected(name);
-      } else {
+      if (selectedRef.current.includes(name)) {
         removeSelected(name);
+      } else {
+        addSelected(name);
       }
     });
 

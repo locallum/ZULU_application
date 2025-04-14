@@ -17,7 +17,7 @@ const Dashboard = () => {
           return prevSelected;
         });
       } else {
-        setSelected([newValue]);
+        setSelected(() => [newValue]);
       }
       return prevIsMultiple;
     });
@@ -30,7 +30,7 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    console.log(isMultiple);
+    setSelected([]);
   }, [isMultiple]);
 
   useEffect(() => {

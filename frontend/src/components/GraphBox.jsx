@@ -1,10 +1,7 @@
 import FormControl from "@mui/material/FormControl";
-import React, { useState } from "react";
-import { TextField, Autocomplete, Chip } from "@mui/material";
 import Switch from "@mui/material/Switch";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import options from "../assets/SuburbOptions";
 
 const GraphBox = ({ isMultiple, setIsMultiple }) => {
   const graphBoxStyle = {
