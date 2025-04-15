@@ -196,7 +196,7 @@ const MapboxMap = ({ selected, addSelected, removeSelected }) => {
 
   useEffect(() => {
     selectedRef.current = selected;
-  }, [selected]);
+  }, [selected]); 
 
   useEffect(() => {
     const markers = document.querySelectorAll('.mapboxgl-marker');
