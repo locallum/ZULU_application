@@ -50,12 +50,18 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     height: isMultiple ? "120px" : "40px",
+    border: "grey solid 2px",
     borderRadius: "18px",
     overflowY: "auto",
     marginTop: "16px",
+    marginBottom: "16px",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-evenly"
   }),
   chip: {
-    marginBottom: "6px",
+    borderRadius: "10px",
+    height: "40px"
   },
   fontFamily: {
     fontFamily: "Montserrat, sans-serif, system-ui",
