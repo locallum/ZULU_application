@@ -20,7 +20,7 @@ const styles = {
     background: "white",
     zIndex: 999,
     borderRadius: "20px",
-    opacity: "80%",
+    opacity: "97%",
     boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.75)",
     display: "flex",
     justifyContent: "center",
@@ -47,8 +47,6 @@ const styles = {
     marginBottom: "8px",
   },
   chipContainer: (isMultiple) => ({
-    display: "flex",
-    flexDirection: "column",
     height: isMultiple ? "120px" : "40px",
     border: "grey solid 2px",
     borderRadius: "18px",
