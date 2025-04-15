@@ -39,7 +39,13 @@ const Dashboard = () => {
 
   return (
     <>
-      <GraphBox isMultiple={isMultiple} setIsMultiple={setIsMultiple} />
+      <GraphBox
+        isMultiple={isMultiple}
+        setIsMultiple={setIsMultiple}
+        selected={selected}
+        addSelected={addSelected}
+        removeSelected={removeSelected}
+      />
       <MapboxMap
         selected={selected}
         addSelected={addSelected}

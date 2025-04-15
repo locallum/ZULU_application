@@ -1,28 +1,81 @@
+import React, { useState } from "react";
 import FormControl from "@mui/material/FormControl";
 import Switch from "@mui/material/Switch";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
+import { Button, Chip } from "@mui/material";
+import Box from "@mui/material/Box";
 
-const GraphBox = ({ isMultiple, setIsMultiple }) => {
+import SuburbOptions from "../assets/SuburbOptions";
+
+const GraphBox = ({
+  isMultiple,
+  setIsMultiple,
+  selected,
+  addSelected,
+  removeSelected,
+}) => {
+  const [autocompleteValue, setAutocompleteValue] = useState(null);
+
   const graphBoxStyle = {
     position: "absolute",
     top: "100px",
     left: "auto",
     right: "30px",
     width: "360px",
-    height: "550px",
-    background: "grey",
+    height: "570px",
+    background: "white",
     zIndex: "999",
     borderRadius: "20px",
     opacity: "80%",
     boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.75)",
+    display: "flex",
+    justifyContent: "center",
+    paddingLeft: "20px",
+    paddingRight: "20px",
   };
+
+  const switchStyle = {
+    width: "260px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingLeft: "30px",
+    paddingRight: "30px",
+    borderRadius: "20px",
+    border: "grey solid 2px",
+    margin: "0 auto",
+    mb: 2,
+    height: "40px",
+  };
+
+  const dropdownHint = {
+    fontFamily: "Montserrat, sans-serif, system-ui",
+    paddingLeft: "10px",
+    paddingRight: "10px",
+    mb: 1,
+  };
+
+  const handleReset = () => {
+    // Reset the autocomplete value to null
+    setAutocompleteValue(null);
+    // Clear selected items
+    SuburbOptions.forEach((suburb) => removeSelected(suburb));
+  };
+
+  const generateGraph = () => {
+
+  }
 
   return (
     <div style={graphBoxStyle}>
-      <FormControl fullWidth>
-        <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
-          <Typography>Single</Typography>
+      <FormControl fullWidth sx={{ p: 2 }}>
+        <Stack direction="row" spacing={1} sx={switchStyle}>
+          <Typography sx={{ fontFamily: "Montserrat, sans-serif, system-ui" }}>
+            Single
+          </Typography>
           <Switch
             checked={isMultiple}
             onChange={(e) => {
@@ -30,9 +83,64 @@ const GraphBox = ({ isMultiple, setIsMultiple }) => {
             }}
             inputProps={{ "aria-label": "select mode" }}
           />
-          <Typography>Multiple</Typography>
+          <Typography sx={{ fontFamily: "Montserrat, sans-serif, system-ui" }}>
+            Multiple
+          </Typography>
         </Stack>
-        
+        <Typography sx={dropdownHint}>
+          Select suburbs on the map, or search using the dropdown menu below:
+        </Typography>
+        <Autocomplete
+          options={SuburbOptions}
+          value={autocompleteValue}
+          onChange={(event, newValue) => {
+            setAutocompleteValue(newValue);
+            if (newValue) addSelected(newValue);
+            setAutocompleteValue(null);
+
+            // Blur the input field
+            if (event?.target) {
+              const input = document.activeElement;
+              if (input instanceof HTMLElement) {
+                input.blur();
+              }
+            }
+          }}
+          disabled={isMultiple ? selected.length >= 3 : selected.length >= 1}
+          renderInput={(params) => (
+            <TextField {...params} label="Select an item" />
+          )}
+        />
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            height: "120px", // Set a max height for the bubble container
+            borderRadius: "18px",
+            overflowY: "auto", // Enable scrolling if there are too many suburbs
+            marginTop: "16px",
+          }}
+        >
+          {selected.map((suburb, index) => (
+            <Chip
+              key={index}
+              label={suburb}
+              onDelete={() => removeSelected(suburb)}
+              color="primary"
+              sx={{ mb: "6px" }}
+            />
+          ))}
+        </div>
+        <Box sx={{ display: "flex", flexDirection: "row", gap: 2, mt: 1 }}>
+          <TextField label="Start Year" fullWidth />
+          <TextField label="End Year" fullWidth />
+        </Box>
+        <Button variant="contained" sx={{ mt: 2, height: "45px" }} onClick={generateGraph}>
+          Generate
+        </Button>
+        <Button variant="outlined" sx={{ mt: 1 }} onClick={handleReset}>
+          Reset
+        </Button>
       </FormControl>
     </div>
   );
