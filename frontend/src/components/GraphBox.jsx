@@ -18,6 +18,8 @@ const GraphBox = ({
   removeSelected,
 }) => {
   const [autocompleteValue, setAutocompleteValue] = useState(null);
+  const [startYear, setStartYear] = useState("");
+  const [endYear, setEndYear] = useState("");
 
   const graphBoxStyle = {
     position: "absolute",
@@ -59,15 +61,16 @@ const GraphBox = ({
   };
 
   const handleReset = () => {
-    // Reset the autocomplete value to null
     setAutocompleteValue(null);
-    // Clear selected items
+    setStartYear("");
+    setEndYear("");
     SuburbOptions.forEach((suburb) => removeSelected(suburb));
   };
 
   const generateGraph = () => {
-
-  }
+    // Implement your graph generation logic using selected, startYear, endYear
+    console.log("Generating graph with:", selected, startYear, endYear);
+  };
 
   return (
     <div style={graphBoxStyle}>
@@ -87,9 +90,11 @@ const GraphBox = ({
             Multiple
           </Typography>
         </Stack>
+
         <Typography sx={dropdownHint}>
           Select suburbs on the map, or search using the dropdown menu below:
         </Typography>
+
         <Autocomplete
           options={SuburbOptions}
           value={autocompleteValue}
@@ -111,13 +116,15 @@ const GraphBox = ({
             <TextField {...params} label="Select an item" />
           )}
         />
+
         <div
           style={{
             display: "flex",
             flexDirection: "column",
-            height: "120px", // Set a max height for the bubble container
+            height: isMultiple ? "120px" : "40px",
+            //border: "solid 2px black",
             borderRadius: "18px",
-            overflowY: "auto", // Enable scrolling if there are too many suburbs
+            overflowY: "auto",
             marginTop: "16px",
           }}
         >
@@ -131,11 +138,27 @@ const GraphBox = ({
             />
           ))}
         </div>
+
         <Box sx={{ display: "flex", flexDirection: "row", gap: 2, mt: 1 }}>
-          <TextField label="Start Year" fullWidth />
-          <TextField label="End Year" fullWidth />
+          <TextField
+            label="Start Year"
+            value={startYear}
+            onChange={(e) => setStartYear(e.target.value)}
+            fullWidth
+          />
+          <TextField
+            label="End Year"
+            value={endYear}
+            onChange={(e) => setEndYear(e.target.value)}
+            fullWidth
+          />
         </Box>
-        <Button variant="contained" sx={{ mt: 2, height: "45px" }} onClick={generateGraph}>
+
+        <Button
+          variant="contained"
+          sx={{ mt: 2, height: "45px" }}
+          onClick={generateGraph}
+        >
           Generate
         </Button>
         <Button variant="outlined" sx={{ mt: 1 }} onClick={handleReset}>
