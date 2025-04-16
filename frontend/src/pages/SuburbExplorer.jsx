@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import GraphBox from "../components/GraphBox";
 import MapboxMap from "../components/MapboxMap";
-import "./Dashboard.css";
+import "./SuburbExplorer.css";
 
 const Dashboard = () => {
   const [selected, setSelected] = useState([]);

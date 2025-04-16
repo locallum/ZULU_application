@@ -81,7 +81,8 @@ const GraphBox = ({
   const [autocompleteValue, setAutocompleteValue] = useState(null);
   const [startYear, setStartYear] = useState("");
   const [endYear, setEndYear] = useState("");
-
+  
+  // Reset form input values
   const handleReset = () => {
     setAutocompleteValue(null);
     setStartYear("");
