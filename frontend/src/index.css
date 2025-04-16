@@ -13,8 +13,13 @@
   line-height: 1.5;
   font-weight: 400;
 
-  /* color-scheme: light dark; */
+  /* Global colour theme (default) */
   color-scheme: light;
+  --background-primary: white;
+  --text-primary: black;
+  --text-secondary: #001429;
+  --accent: #006ddb;
+  --subtle: #9aa0a7;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -30,8 +35,8 @@ h1 {
 /* Default light mode colour scheme */
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    color: var(--text-primary);
+    background-color: var(--background-primary);
   }
 }
 

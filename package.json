@@ -1,18 +1,21 @@
 {
   "name": "zulu_application",
   "version": "1.0.0",
-  "description": "",
+  "description": "Run `nvm use` each time you reopen the frontend directory to switch to the required Node version. (If this version of Node is not already installed, you can run `nvm install` to automatically install and switch to it.)",
   "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node backend/server.js"
   },
-  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/locallum/ZULU_application.git"
+  },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "axios": "^1.8.4",
-    "cors": "^2.8.5",
-    "express": "^5.1.0"
-  }
+  "bugs": {
+    "url": "https://github.com/locallum/ZULU_application/issues"
+  },
+  "homepage": "https://github.com/locallum/ZULU_application#readme"
 }

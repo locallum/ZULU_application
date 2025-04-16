@@ -1,26 +1,56 @@
-import Grid from "@mui/material/Grid";
-import GraphForm from "../components/GraphForm";
+import { useEffect, useState } from "react";
 import GraphBox from "../components/GraphBox";
+import MapboxMap from "../components/MapboxMap";
+import "./Dashboard.css";
 
-/**
- * The dashboard screen displays all main website content.
- */
 const Dashboard = () => {
+  const [selected, setSelected] = useState([]);
+  const [isMultiple, setIsMultiple] = useState(false);
+
+  const addSelected = (newValue) => {
+    setIsMultiple((prevIsMultiple) => {
+      if (prevIsMultiple) {
+        setSelected((prevSelected) => {
+          if (!prevSelected.includes(newValue) && prevSelected.length < 3) {
+            return [...prevSelected, newValue];
+          }
+          return prevSelected;
+        });
+      } else {
+        setSelected(() => [newValue]);
+      }
+      return prevIsMultiple;
+    });
+  };
+
+  const removeSelected = (valueToRemove) => {
+    setSelected((prevSelected) => {
+      return prevSelected.filter((value) => value !== valueToRemove);
+    });
+  };
+
+  useEffect(() => {
+    setSelected([]);
+  }, [isMultiple]);
+
+  useEffect(() => {
+    console.log(selected);
+  }, [selected]);
+
   return (
     <>
-      <div className="page-contents">
-        <h1>
-          Population Data Projection
-        </h1>
-        <Grid container spacing={8} sx={{ width: '100%', flexGrow: 1 }}>
-          <Grid size={4}>
-            <GraphForm />
-          </Grid>
-          <Grid size={8}>
-            <GraphBox />
-          </Grid>
-        </Grid>
-      </div>
+      <GraphBox
+        isMultiple={isMultiple}
+        setIsMultiple={setIsMultiple}
+        selected={selected}
+        addSelected={addSelected}
+        removeSelected={removeSelected}
+      />
+      <MapboxMap
+        selected={selected}
+        addSelected={addSelected}
+        removeSelected={removeSelected}
+      />
     </>
   );
 };
