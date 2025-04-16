@@ -185,7 +185,7 @@ const markerStyle = {
   cursor: "pointer",
   width: "16px",
   height: "10px",
-  backgroundColor: "white",
+  backgroundColor: "var(--background-primary)",
   borderRadius: "50%",
   transition: "background-color 0.3s",
 };

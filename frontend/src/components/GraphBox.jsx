@@ -5,7 +5,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
-import { Button, Chip } from "@mui/material";
+import { Button, Chip, FormHelperText } from "@mui/material";
 import Box from "@mui/material/Box";
 
 import SuburbOptions from "../assets/SuburbOptions";
@@ -16,8 +16,7 @@ const styles = {
     top: "100px",
     right: "30px",
     width: "360px",
-    height: "570px",
-    background: "white",
+    background: "var(--background-primary)",
     zIndex: 999,
     borderRadius: "20px",
     opacity: "97%",
@@ -28,14 +27,15 @@ const styles = {
     paddingRight: "20px",
   },
   switchContainer: {
-    width: "260px",
+    width: "90%",
     display: "flex",
     alignItems: "center",
-    justifyContent: "space-between",
-    paddingLeft: "30px",
-    paddingRight: "30px",
-    borderRadius: "20px",
-    border: "2px solid grey",
+    justifyContent: "center",
+    padding: "20px",
+    paddingBottom: "30px",
+    // borderRadius: "4px",
+    // backgroundColor: "var(--subtle)",
+    borderBottom: "1px solid var(--subtle)",
     margin: "0 auto",
     height: "40px",
     mb: "20px"
@@ -48,18 +48,20 @@ const styles = {
   },
   chipContainer: (isMultiple) => ({
     height: isMultiple ? "120px" : "40px",
-    border: "grey solid 2px",
-    borderRadius: "18px",
+    border: "var(--subtle) solid 1px",
+    borderRadius: "8px",
     overflowY: "auto",
-    marginTop: "16px",
-    marginBottom: "16px",
+    margin: "16px 0px",
+    padding: "8px",
     display: "flex",
     flexDirection: "column",
-    justifyContent: "space-evenly"
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
+    gap: "8px"
   }),
   chip: {
     borderRadius: "10px",
-    height: "40px"
+    height: "32px"
   },
   fontFamily: {
     fontFamily: "Montserrat, sans-serif, system-ui",
@@ -105,7 +107,7 @@ const GraphBox = ({
         </Stack>
 
         <Typography sx={styles.dropdownHint}>
-          Select suburbs on the map, or search using the dropdown menu below:
+          Select {isMultiple ? "up to 3 suburbs" : "a suburb"} on the map, or search using the dropdown menu below:
         </Typography>
 
         <Autocomplete
@@ -132,12 +134,14 @@ const GraphBox = ({
               key={index}
               label={suburb}
               onDelete={() => removeSelected(suburb)}
-              color="primary"
               sx={styles.chip}
             />
           ))}
         </div>
 
+        <Typography sx={styles.dropdownHint}>
+          Select a year range between 2021 and 2066:
+        </Typography>
         <Box sx={{ display: "flex", flexDirection: "row", gap: 2, mt: 1 }}>
           <TextField
             label="Start Year"

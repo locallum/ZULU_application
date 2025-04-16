@@ -19,8 +19,8 @@
 }
 
 .header-container {
-  background-color: #1565c0;
-  color: white;
+  background-color: var(--accent);
+  color: var(--background-primary);
   min-height: 8vh;
   display: flex;
   flex-direction: row;
