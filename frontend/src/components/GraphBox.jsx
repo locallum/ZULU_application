@@ -38,7 +38,7 @@ const styles = {
     borderBottom: "1px solid var(--subtle)",
     margin: "0 auto",
     height: "40px",
-    mb: "20px"
+    mb: "20px",
   },
   dropdownHint: {
     fontFamily: "Montserrat, sans-serif, system-ui",
@@ -57,11 +57,11 @@ const styles = {
     flexDirection: "column",
     alignItems: "flex-start",
     justifyContent: "flex-start",
-    gap: "8px"
+    gap: "8px",
   }),
   chip: {
     borderRadius: "10px",
-    height: "32px"
+    height: "32px",
   },
   fontFamily: {
     fontFamily: "Montserrat, sans-serif, system-ui",
@@ -81,7 +81,7 @@ const GraphBox = ({
   const [autocompleteValue, setAutocompleteValue] = useState(null);
   const [startYear, setStartYear] = useState("");
   const [endYear, setEndYear] = useState("");
-  
+
   // Reset form input values
   const handleReset = () => {
     setAutocompleteValue(null);
@@ -90,8 +90,53 @@ const GraphBox = ({
     SuburbOptions.forEach((suburb) => removeSelected(suburb));
   };
 
-  const generateGraph = () => {
-    console.log("Generating graph with:", selected, startYear, endYear);
+  const generateGraph = async () => {
+    try {
+      const params = new URLSearchParams({
+        startYear: startYear,
+        endYear: endYear,
+      });
+      params.append("suburbs", `[${selected}]`);
+      console.log(params.toString()); // check final URL
+
+      const response = await fetch(`/retrieve/singleSuburb?${params}`);
+
+      const data = await response.json();
+      console.log(data.suburbsPopulationEstimates[0]);
+
+      let graphTitle = "Population Projection: ";
+      data.suburbsPopulationEstimates.forEach((suburb) => {
+        graphTitle += `${suburb.suburb} `;
+      })
+
+      const labels = data.suburbsPopulationEstimates
+          .map((suburb) => suburb.suburb)
+          .join(',');
+
+      const yData = data.suburbsPopulationEstimates
+          .map((suburb) => suburb.estimates.join('-'))
+          .join(',');
+
+
+      const visParams = new URLSearchParams();
+      visParams.append("title", graphTitle);
+      visParams.append("x_header", "Years");
+      visParams.append("y_header", "Population");
+      visParams.append("labels", labels);
+      visParams.append("x_data", data.suburbsPopulationEstimates[0].years);
+      visParams.append("y_data", yData);
+
+      console.log(visParams.toString());
+
+      const visResponse = await fetch(`/visualisation/singleSuburb?${visParams}`);
+
+      const visData = await visResponse.json();
+      console.log(visData);
+
+      return data;
+    } catch (error) {
+      console.error(error.message);
+    }
   };
 
   return (
@@ -108,7 +153,8 @@ const GraphBox = ({
         </Stack>
 
         <Typography sx={styles.dropdownHint}>
-          Select {isMultiple ? "up to 3 suburbs" : "a suburb"} on the map, or search using the dropdown menu below:
+          Select {isMultiple ? "up to 3 suburbs" : "a suburb"} on the map, or
+          search using the dropdown menu below:
         </Typography>
 
         <Autocomplete

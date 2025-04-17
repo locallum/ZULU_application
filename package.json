@@ -6,7 +6,8 @@
   "dependencies": {},
   "devDependencies": {},
   "scripts": {
-    "start": "node backend/server.js"
+    "start": "node backend/server.js",
+    "dev": "cd frontend && npm run build && cd .. && node backend/server.js"
   },
   "repository": {
     "type": "git",
