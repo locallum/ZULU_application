@@ -1,26 +1,54 @@
 import * as Auth from '@aws-amplify/auth';
-
-// import { COGNITO_CONFIG } from './aws-exports';
-
-// const pool = new CognitoUserPool(COGNITO_CONFIG);
+import { fetchUserAttributes, fetchAuthSession } from 'aws-amplify/auth';
 
 export const signUp = async (username, email, password) => {
+  console.log(username);
+  console.log(email);
+  console.log(password);
   return await Auth.signUp({
-    username, // stored as Cognito username
+    'username': email, // stored as Cognito username
     password,
-    attributes: { email },
+    options: {
+      userAttributes: {
+        name: username,
+      },
+    }
   });
 };
 
-export const confirmSignUp = async (email, code) => {
-  return await Auth.confirmSignUp(email, code);
+export const confirmSignUp = async (email, username, code) => {
+  console.log(username);
+  console.log(email);
+  console.log(code);  
+  return await Auth.confirmSignUp({
+    'username': email,
+    'confirmationCode': code
+  });
 };
 
 
 export const signIn = async (usernameOrEmail, password) => {
   try {
-    await Auth.signIn(usernameOrEmail, password);
-    return await getCurrentUser(); // 👈 Pull and store token + username
+    await Auth.signIn(({
+      username: usernameOrEmail,
+      password: password,
+    }));
+    const user = await fetchUserAttributes();
+    const session = await fetchAuthSession();
+
+    const name = user.name
+    const accessToken = session.tokens?.accessToken?.toString();
+    const idToken = session.tokens?.idToken?.toString();
+
+    localStorage.setItem('name', name);
+    localStorage.setItem('access_token', accessToken);
+    localStorage.setItem('id_token', idToken);
+
+    return {
+      name,
+      accessToken,
+      idToken,
+    };
   } catch (error) {
     throw error;
   }

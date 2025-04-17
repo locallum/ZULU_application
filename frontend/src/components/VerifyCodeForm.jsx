@@ -8,7 +8,7 @@ import {
   Stack,
 } from '@mui/material';
 
-export default function VerifyCodeForm({ email, onSuccess }) {
+export default function VerifyCodeForm({ email, username, onSuccess }) {
   const [code, setCode] = useState(Array(6).fill(''));
   const inputsRef = useRef([]);
   const [snack, setSnack] = useState({ open: false, message: '', severity: 'error' });
@@ -29,7 +29,7 @@ export default function VerifyCodeForm({ email, onSuccess }) {
     }
 
     try {
-      await confirmSignUp(email, fullCode);
+      await confirmSignUp(email, username, fullCode);
       setSnack({ open: true, message: 'Verification successful!', severity: 'success' });
       onSuccess();
     } catch (err) {

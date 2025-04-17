@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 export default function AuthPage() {
   const [mode, setMode] = useState('signin'); // 'signup' or 'signin'
   const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [showVerification, setShowVerification] = useState(false);
   const navigate = useNavigate();
   const theme = useTheme();
@@ -64,8 +65,9 @@ export default function AuthPage() {
             mode === 'signup' ? (
               <>
                 <SignUpForm
-                  onSuccess={(email) => {
+                  onSuccess={(email, username) => {
                     setEmail(email);
+                    setUsername(username);
                     setShowVerification(true);
                   }}
                 />
@@ -87,7 +89,7 @@ export default function AuthPage() {
               </>
             )
           ) : (
-            <VerifyCodeForm email={email} onSuccess={handleVerified} />
+            <VerifyCodeForm email={email} username={username} onSuccess={handleVerified} />
           )}
         </Box>
 

@@ -25,7 +25,7 @@ export default function SignUpForm({ onSuccess }) {
     try {
       await signUp(username, email, password);
       setSnack({ open: true, message: 'Sign up successful! Check your email.', severity: 'success' });
-      onSuccess(email);
+      onSuccess(email, username);
     } catch (err) {
       setSnack({ open: true, message: err.message, severity: 'error' });
     }
