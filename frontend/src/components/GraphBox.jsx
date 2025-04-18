@@ -70,7 +70,7 @@ const GraphBox = ({
   const [loading, setLoading] = useState(false);
 
   // Reset form input values
-  const handleReset = () => {
+   const handleReset = () => {
     setAutocompleteValue(null);
     setStartYear("");
     setEndYear("");
@@ -212,13 +212,6 @@ const GraphBox = ({
             onClick={generateGraph}
           >
             Generate results
-          </Button>
-          <Button
-            variant="outlined"
-            sx={styles.buttonSpacing}
-            onClick={handleReset}
-          >
-            Reset
           </Button>
         </FormControl>
       </div>
