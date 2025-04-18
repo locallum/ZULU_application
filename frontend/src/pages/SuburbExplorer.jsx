@@ -1,10 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./SuburbExplorer.css";
 import GraphBox from "../components/GraphBox.jsx";
 import MapboxMap from "../components/MapboxMap.jsx";
+import ResultsPage from "../components/ResultsPage.jsx";
 
 const Dashboard = () => {
   const [selected, setSelected] = useState([]);
+  const [resultsImg, setResultsImg] = useState("")
+
+  const resultsRef = useRef(null);
 
   const addSelected = (newValue) => {
     setSelected((prevSelected) => {
@@ -27,18 +31,32 @@ const Dashboard = () => {
     console.log(selected);
   }, [selected]);
 
+  useEffect(() => {
+    if (resultsImg && resultsRef.current) {
+      resultsRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [resultsImg]);
+
+
   return (
     <>
       <GraphBox
         selected={selected}
         addSelected={addSelected}
         removeSelected={removeSelected}
+        setResultsImg={setResultsImg}
       />
       <MapboxMap
         selected={selected}
         addSelected={addSelected}
         removeSelected={removeSelected}
       />
+      <div ref={resultsRef} style={{ padding: "0px" }}>
+        <ResultsPage
+          selected={selected}
+          resultsImg={resultsImg}
+        />
+      </div>
     </>
   );
 };

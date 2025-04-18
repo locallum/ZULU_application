@@ -61,22 +61,26 @@ const GraphBox = ({
                     selected,
                     addSelected,
                     removeSelected,
+                    setResultsImg
                   }) => {
   const [autocompleteValue, setAutocompleteValue] = useState(null);
   const [startYear, setStartYear] = useState("");
   const [endYear, setEndYear] = useState("");
   const [platform, setPlatform] = useState("population");
+  const [loading, setLoading] = useState(false);
 
   // Reset form input values
   const handleReset = () => {
     setAutocompleteValue(null);
     setStartYear("");
     setEndYear("");
+    setResultsImg("");
     SuburbOptions.forEach((suburb) => removeSelected(suburb));
   };
 
   const generateGraph = async () => {
     try {
+      setLoading(true);
       const params = new URLSearchParams({
         startYear: startYear,
         endYear: endYear,
@@ -116,11 +120,16 @@ const GraphBox = ({
       const visResponse = await fetch(`/visualisation?${visParams}`);
 
       const visData = await visResponse.json();
+      const parsedVisData = JSON.parse(visData.body);
       console.log(visData);
+
+      setResultsImg(parsedVisData.image);
 
       return data;
     } catch (error) {
       console.error(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -197,11 +206,12 @@ const GraphBox = ({
           </Box>
 
           <Button
+            loading={loading}
             variant="contained"
             sx={{ mt: 2, height: "45px" }}
             onClick={generateGraph}
           >
-            Generate
+            Generate results
           </Button>
           <Button
             variant="outlined"
