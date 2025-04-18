@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import {
   Box,
-  Grid,
   Paper,
   Typography,
   Button,
@@ -12,6 +11,7 @@ import SignUpForm from '../components/SignUpForm';
 import SignInForm from '../components/SignInForm';
 import VerifyCodeForm from '../components/VerifyCodeForm';
 import { useNavigate } from 'react-router-dom';
+import logo from '../assets/images/logo.png'
 
 export default function AuthPage() {
   const [mode, setMode] = useState('signin'); // 'signup' or 'signin'
@@ -23,87 +23,100 @@ export default function AuthPage() {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const handleVerified = () => {
-    navigate('/home');
+    setMode('signin');
+    navigate('/explorer');
+  };
+
+  const handleRegistered = () => {
+    setShowVerification(false);
+    setMode('signin');
+    navigate('/login');
   };
 
   return (
-    <Box
-      sx={{
-        height: '100vh',
-        backgroundColor: '#f0f2f5',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <Paper
-        elevation={3}
+    <>
+      <Box
         sx={{
-          width: isMobile ? '90%' : '800px',
-          minHeight: '500px',
-          borderRadius: 2,
-          overflow: 'hidden',
+          height: '100vh',
+          backgroundColor: '#f0f2f5',
           display: 'flex',
-          flexDirection: isMobile ? 'column' : 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
       >
-        {/* Left side: Forms */}
-        <Box
+        <Paper
+          elevation={3}
           sx={{
-            flex: 1,
-            p: 4,
+            width: isMobile ? '90%' : '800px',
+            minHeight: '500px',
+            borderRadius: 2,
+            overflow: 'hidden',
             display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
+            flexDirection: isMobile ? 'column' : 'row',
           }}
         >
-          <Typography variant="h5" gutterBottom>
-            {mode === 'signup' ? 'Create an Account' : 'Welcome Back'}
-          </Typography>
+          {/* Left side: Forms */}
+          <Box
+            sx={{
+              flex: 1,
+              p: 4,
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+            }}
+          >
+            <Typography variant="h5" gutterBottom>
+              {showVerification
+                ? 'Verify Email'
+                : mode === 'signup'
+                ? 'Create an Account'
+                : 'Welcome Back'}
+            </Typography>
 
-          {!showVerification ? (
-            mode === 'signup' ? (
-              <>
-                <SignUpForm
-                  onSuccess={(email, username) => {
-                    setEmail(email);
-                    setUsername(username);
-                    setShowVerification(true);
-                  }}
-                />
-                <Button onClick={() => setMode('signin')} sx={{ mt: 2 }}>
-                  Already have an account? Sign In
-                </Button>
-              </>
+            {!showVerification ? (
+              mode === 'signup' ? (
+                <>
+                  <SignUpForm
+                    onSuccess={(email, username) => {
+                      setEmail(email);
+                      setUsername(username);
+                      setShowVerification(true);
+                    }}
+                  />
+                  <Button onClick={() => setMode('signin')} sx={{ mt: 2 }}>
+                    Already have an account? Sign In
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <SignInForm
+                    onSuccess={(email) => {
+                      setEmail(email);
+                      handleVerified();
+                    }}
+                  />
+                  <Button onClick={() => setMode('signup')} sx={{ mt: 2 }}>
+                    Don't have an account? Sign Up
+                  </Button>
+                </>
+              )
             ) : (
-              <>
-                <SignInForm
-                  onSuccess={(email) => {
-                    setEmail(email);
-                    setShowVerification(true);
-                  }}
-                />
-                <Button onClick={() => setMode('signup')} sx={{ mt: 2 }}>
-                  Don't have an account? Sign Up
-                </Button>
-              </>
-            )
-          ) : (
-            <VerifyCodeForm email={email} username={username} onSuccess={handleVerified} />
-          )}
-        </Box>
+              <VerifyCodeForm email={email} username={username} onSuccess={handleRegistered} />
+            )}
+          </Box>
 
-        {/* Right side: Image */}
-        <Box
-          sx={{
-            flex: 1,
-            backgroundImage: 'url("https://via.placeholder.com/400x500")',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            display: isMobile ? 'none' : 'block',
-          }}
-        />
-      </Paper>
-    </Box>
+          {/* Right side: Image */}
+          <Box
+            sx={{
+              flex: 1,
+              backgroundImage: `url(${logo})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              display: isMobile ? 'none' : 'block',
+            }}
+          />
+        </Paper>
+      </Box>
+    </>
   );
 }

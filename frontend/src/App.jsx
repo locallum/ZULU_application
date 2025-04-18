@@ -23,7 +23,6 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route path="/explorer" element={<SuburbExplorer />} />
             <Route path="/dashboard" element={<UserDashboard />} />
-            <Route path="/register" element={<Register />} />
             <Route index element={<Home />} />
           </Route>
           <Route path="/login" element={<AuthPage />} />

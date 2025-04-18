@@ -6,6 +6,7 @@ import {
   Stack,
   Snackbar,
   Alert,
+  Typography,
 } from '@mui/material';
 
 export default function SignUpForm({ onSuccess }) {
@@ -25,7 +26,10 @@ export default function SignUpForm({ onSuccess }) {
     try {
       await signUp(username, email, password);
       setSnack({ open: true, message: 'Sign up successful! Check your email.', severity: 'success' });
-      onSuccess(email, username);
+      setTimeout(() => {
+        onSuccess(email, username);
+      }, 500);
+      // onSuccess(email, username);
     } catch (err) {
       setSnack({ open: true, message: err.message, severity: 'error' });
     }
@@ -33,6 +37,10 @@ export default function SignUpForm({ onSuccess }) {
 
   return (
     <>
+      <Typography variant="body1" gutterBottom sx={{ mb: 1.5 }}>
+        {'Please sign up to an account using a username, your preferred email and a password.'}
+      </Typography>
+
       <form onSubmit={handleSubmit}>
         <Stack spacing={2}>
           <TextField
@@ -64,8 +72,15 @@ export default function SignUpForm({ onSuccess }) {
         </Stack>
       </form>
 
-      <Snackbar open={snack.open} autoHideDuration={4000} onClose={() => setSnack({ ...snack, open: false })}>
-        <Alert severity={snack.severity}>{snack.message}</Alert>
+      <Snackbar
+        open={snack.open}
+        autoHideDuration={4000}
+        onClose={() => setSnack({ ...snack, open: false })}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert severity={snack.severity} variant="filled" sx={{ width: '100%' }}>
+          {snack.message}
+        </Alert>
       </Snackbar>
     </>
   );

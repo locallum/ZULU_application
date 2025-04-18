@@ -6,6 +6,7 @@ import {
   Stack,
   Snackbar,
   Alert,
+  Typography,
 } from '@mui/material';
 
 export default function SignInForm({ onSuccess }) {
@@ -25,7 +26,10 @@ export default function SignInForm({ onSuccess }) {
       const token = await signIn(email, password);
       // localStorage.setItem('id_token', token);
       setSnack({ open: true, message: 'Logged in successfully!', severity: 'success' });
-      onSuccess(email);
+      setTimeout(() => {
+        onSuccess(email);
+      }, 500);
+      // onSuccess(email);
     } catch (err) {
       setSnack({ open: true, message: err.message, severity: 'error' });
     }
@@ -33,6 +37,10 @@ export default function SignInForm({ onSuccess }) {
 
   return (
     <>
+      <Typography variant="body1" gutterBottom sx={{ mb: 1.5 }}>
+        {'Please sign in using your email and password'}
+      </Typography>
+
       <form onSubmit={handleSubmit}>
         <Stack spacing={2}>
           <TextField
@@ -57,8 +65,15 @@ export default function SignInForm({ onSuccess }) {
         </Stack>
       </form>
 
-      <Snackbar open={snack.open} autoHideDuration={4000} onClose={() => setSnack({ ...snack, open: false })}>
-        <Alert severity={snack.severity}>{snack.message}</Alert>
+      <Snackbar
+        open={snack.open}
+        autoHideDuration={4000}
+        onClose={() => setSnack({ ...snack, open: false })}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert severity={snack.severity} variant="filled" sx={{ width: '100%' }}>
+          {snack.message}
+        </Alert>
       </Snackbar>
     </>
   );
