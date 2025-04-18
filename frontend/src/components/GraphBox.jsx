@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import FormControl from "@mui/material/FormControl";
-import Switch from "@mui/material/Switch";
-import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
-import { Button, Chip, FormHelperText } from "@mui/material";
+import {Button, Chip, ToggleButton, ToggleButtonGroup} from "@mui/material";
 import Box from "@mui/material/Box";
 
 import SuburbOptions from "../assets/SuburbOptions";
@@ -13,7 +11,7 @@ import SuburbOptions from "../assets/SuburbOptions";
 const styles = {
   graphBox: {
     position: "absolute",
-    top: "100px",
+    top: "80px",
     right: "30px",
     width: "360px",
     background: "var(--background-primary)",
@@ -22,23 +20,11 @@ const styles = {
     opacity: "97%",
     boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.75)",
     display: "flex",
-    justifyContent: "center",
-    paddingLeft: "20px",
-    paddingRight: "20px",
-  },
-  switchContainer: {
-    width: "90%",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: "20px",
-    paddingBottom: "30px",
-    // borderRadius: "4px",
-    // backgroundColor: "var(--subtle)",
-    borderBottom: "1px solid var(--subtle)",
-    margin: "0 auto",
-    height: "40px",
-    mb: "20px",
+    flexDirection: "column",
+    justifyContent: "flex-start",
+    paddingTop: "0px",
+    paddingLeft: "0px",
+    paddingRight: "0px",
   },
   dropdownHint: {
     fontFamily: "Montserrat, sans-serif, system-ui",
@@ -46,8 +32,8 @@ const styles = {
     paddingRight: "10px",
     marginBottom: "8px",
   },
-  chipContainer: (isMultiple) => ({
-    height: isMultiple ? "120px" : "40px",
+  chipContainer: ({
+    height:  "120px",
     border: "var(--subtle) solid 1px",
     borderRadius: "8px",
     overflowY: "auto",
@@ -61,7 +47,7 @@ const styles = {
   }),
   chip: {
     borderRadius: "10px",
-    height: "32px",
+    height: "28px",
   },
   fontFamily: {
     fontFamily: "Montserrat, sans-serif, system-ui",
@@ -72,15 +58,14 @@ const styles = {
 };
 
 const GraphBox = ({
-  isMultiple,
-  setIsMultiple,
-  selected,
-  addSelected,
-  removeSelected,
-}) => {
+                    selected,
+                    addSelected,
+                    removeSelected,
+                  }) => {
   const [autocompleteValue, setAutocompleteValue] = useState(null);
   const [startYear, setStartYear] = useState("");
   const [endYear, setEndYear] = useState("");
+  const [platform, setPlatform] = useState("population");
 
   // Reset form input values
   const handleReset = () => {
@@ -99,7 +84,7 @@ const GraphBox = ({
       params.append("suburbs", `[${selected}]`);
       console.log(params.toString()); // check final URL
 
-      const response = await fetch(`/retrieve/singleSuburb?${params}`);
+      const response = await fetch(`/retrieve/population?${params}`);
 
       const data = await response.json();
       console.log(data.suburbsPopulationEstimates[0]);
@@ -110,12 +95,12 @@ const GraphBox = ({
       })
 
       const labels = data.suburbsPopulationEstimates
-          .map((suburb) => suburb.suburb)
-          .join(',');
+        .map((suburb) => suburb.suburb)
+        .join(',');
 
       const yData = data.suburbsPopulationEstimates
-          .map((suburb) => suburb.estimates.join('-'))
-          .join(',');
+        .map((suburb) => suburb.estimates.join('-'))
+        .join(',');
 
 
       const visParams = new URLSearchParams();
@@ -128,7 +113,7 @@ const GraphBox = ({
 
       console.log(visParams.toString());
 
-      const visResponse = await fetch(`/visualisation/singleSuburb?${visParams}`);
+      const visResponse = await fetch(`/visualisation?${visParams}`);
 
       const visData = await visResponse.json();
       console.log(visData);
@@ -141,84 +126,92 @@ const GraphBox = ({
 
   return (
     <div style={styles.graphBox}>
-      <FormControl fullWidth sx={{ p: 2 }}>
-        <Stack direction="row" spacing={1} sx={styles.switchContainer}>
-          <Typography sx={styles.fontFamily}>Single</Typography>
-          <Switch
-            checked={isMultiple}
-            onChange={(e) => setIsMultiple(e.target.checked)}
-            inputProps={{ "aria-label": "select mode" }}
+      <ToggleButtonGroup
+        color="primary"
+        exclusive
+        value={platform}
+        fullWidth
+        onChange={(event, newValue) => {
+          if (newValue !== null) {
+            setPlatform(newValue);
+          }
+        }}
+        aria-label="Platform"
+        sx={{ height: "45px" }}
+      >
+        <ToggleButton value="population">Population</ToggleButton>
+        <ToggleButton value="traffic">Traffic</ToggleButton>
+      </ToggleButtonGroup>
+      <div style={{ paddingLeft: "20px", paddingRight: "20px" }}>
+        <FormControl fullWidth sx={{ p: 2 }}>
+          <Typography sx={styles.dropdownHint}>
+            Select up to 3 suburbs on the map, or
+            search using the dropdown menu below:
+          </Typography>
+
+          <Autocomplete
+            options={SuburbOptions}
+            value={autocompleteValue}
+            onChange={(event, newValue) => {
+              setAutocompleteValue(newValue);
+              if (newValue) addSelected(newValue);
+              setAutocompleteValue(null);
+              if (event?.target) {
+                const input = document.activeElement;
+                if (input instanceof HTMLElement) input.blur();
+              }
+            }}
+            disabled={selected.length >= 3}
+            renderInput={(params) => (
+              <TextField {...params} label="Select an item" />
+            )}
           />
-          <Typography sx={styles.fontFamily}>Multiple</Typography>
-        </Stack>
 
-        <Typography sx={styles.dropdownHint}>
-          Select {isMultiple ? "up to 3 suburbs" : "a suburb"} on the map, or
-          search using the dropdown menu below:
-        </Typography>
+          <div style={styles.chipContainer}>
+            {selected.map((suburb, index) => (
+              <Chip
+                key={index}
+                label={suburb}
+                onDelete={() => removeSelected(suburb)}
+                sx={styles.chip}
+              />
+            ))}
+          </div>
 
-        <Autocomplete
-          options={SuburbOptions}
-          value={autocompleteValue}
-          onChange={(event, newValue) => {
-            setAutocompleteValue(newValue);
-            if (newValue) addSelected(newValue);
-            setAutocompleteValue(null);
-            if (event?.target) {
-              const input = document.activeElement;
-              if (input instanceof HTMLElement) input.blur();
-            }
-          }}
-          disabled={isMultiple ? selected.length >= 3 : selected.length >= 1}
-          renderInput={(params) => (
-            <TextField {...params} label="Select an item" />
-          )}
-        />
-
-        <div style={styles.chipContainer(isMultiple)}>
-          {selected.map((suburb, index) => (
-            <Chip
-              key={index}
-              label={suburb}
-              onDelete={() => removeSelected(suburb)}
-              sx={styles.chip}
+          <Typography sx={styles.dropdownHint}>
+            Select a year range between 2021 and 2066:
+          </Typography>
+          <Box sx={{ display: "flex", flexDirection: "row", gap: 2, mt: 1 }}>
+            <TextField
+              label="Start Year"
+              value={startYear}
+              onChange={(e) => setStartYear(e.target.value)}
+              fullWidth
             />
-          ))}
-        </div>
+            <TextField
+              label="End Year"
+              value={endYear}
+              onChange={(e) => setEndYear(e.target.value)}
+              fullWidth
+            />
+          </Box>
 
-        <Typography sx={styles.dropdownHint}>
-          Select a year range between 2021 and 2066:
-        </Typography>
-        <Box sx={{ display: "flex", flexDirection: "row", gap: 2, mt: 1 }}>
-          <TextField
-            label="Start Year"
-            value={startYear}
-            onChange={(e) => setStartYear(e.target.value)}
-            fullWidth
-          />
-          <TextField
-            label="End Year"
-            value={endYear}
-            onChange={(e) => setEndYear(e.target.value)}
-            fullWidth
-          />
-        </Box>
-
-        <Button
-          variant="contained"
-          sx={{ mt: 2, height: "45px" }}
-          onClick={generateGraph}
-        >
-          Generate
-        </Button>
-        <Button
-          variant="outlined"
-          sx={styles.buttonSpacing}
-          onClick={handleReset}
-        >
-          Reset
-        </Button>
-      </FormControl>
+          <Button
+            variant="contained"
+            sx={{ mt: 2, height: "45px" }}
+            onClick={generateGraph}
+          >
+            Generate
+          </Button>
+          <Button
+            variant="outlined"
+            sx={styles.buttonSpacing}
+            onClick={handleReset}
+          >
+            Reset
+          </Button>
+        </FormControl>
+      </div>
     </div>
   );
 };

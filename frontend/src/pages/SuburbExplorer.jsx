@@ -1,37 +1,27 @@
 import { useEffect, useState } from "react";
-import GraphBox from "../components/GraphBox";
-import MapboxMap from "../components/MapboxMap";
 import "./SuburbExplorer.css";
+import GraphBox from "../components/GraphBox.jsx";
+import MapboxMap from "../components/MapboxMap.jsx";
 
 const Dashboard = () => {
   const [selected, setSelected] = useState([]);
-  const [isMultiple, setIsMultiple] = useState(false);
 
   const addSelected = (newValue) => {
-    setIsMultiple((prevIsMultiple) => {
-      if (prevIsMultiple) {
-        setSelected((prevSelected) => {
-          if (!prevSelected.includes(newValue) && prevSelected.length < 3) {
-            return [...prevSelected, newValue];
-          }
-          return prevSelected;
-        });
-      } else {
-        setSelected(() => [newValue]);
+    setSelected((prevSelected) => {
+      if (!prevSelected.includes(newValue)) {
+        if (prevSelected.length < 3) {
+          return [...prevSelected, newValue];
+        }
       }
-      return prevIsMultiple;
+      return prevSelected;
     });
   };
 
   const removeSelected = (valueToRemove) => {
-    setSelected((prevSelected) => {
-      return prevSelected.filter((value) => value !== valueToRemove);
-    });
+    setSelected((prevSelected) =>
+      prevSelected.filter((value) => value !== valueToRemove)
+    );
   };
-
-  useEffect(() => {
-    setSelected([]);
-  }, [isMultiple]);
 
   useEffect(() => {
     console.log(selected);
@@ -40,8 +30,6 @@ const Dashboard = () => {
   return (
     <>
       <GraphBox
-        isMultiple={isMultiple}
-        setIsMultiple={setIsMultiple}
         selected={selected}
         addSelected={addSelected}
         removeSelected={removeSelected}

@@ -7,26 +7,39 @@ app.use(cors());
 
 const port = process.env.PORT || 3000;
 
-const retreivalURL =
+const populationRetrievalURL =
   "https://slzykzeusf.execute-api.us-east-1.amazonaws.com/prod/";
+const trafficRetrievalURL = "https://ga1wu9p0i0.execute-api.us-east-1.amazonaws.com/dev"
 const visualisationURL =
   "https://f8jc59emd2.execute-api.us-east-1.amazonaws.com/dev/";
 
 //---------------------------RETRIEVAL CALLS---------------------------\\
-app.get("/retrieve/singleSuburb", async (req, res) => {
+app.get("/retrieve/population", async (req, res) => {
   const { suburbs, startYear, endYear } = req.query;
   try {
-    const response = await axios.get(`${retreivalURL}populations/v1`, {
+    const response = await axios.get(`${populationRetrievalURL}populations/v1`, {
       params: { suburbs, startYear, endYear },
     });
     res.json(response.data);
   } catch (error) {
-    res.status(500).send("Error fetching data from retrieval API");
+    res.status(500).send("Error fetching data from population retrieval API");
+  }
+});
+
+app.get("/retrieve/population", async (req, res) => {
+  const { suburbs, startYear, endYear } = req.query;
+  try {
+    const response = await axios.get(`${trafficRetrievalURL}populations/v1`, {
+      params: { suburbs, startYear, endYear },
+    });
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).send("Error fetching data from traffic retrieval API");
   }
 });
 
 //-------------------------VISUALISATION CALLS-------------------------\\
-app.get("/visualisation/singleSuburb", async (req, res) => {
+app.get("/visualisation", async (req, res) => {
   const { title, x_header, y_header, labels, x_data, y_data } = req.query;
 
   try {
