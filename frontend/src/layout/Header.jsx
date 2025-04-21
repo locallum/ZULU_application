@@ -4,9 +4,9 @@ import Button from '@mui/material/Button';
 
 // Custom styling for nav text buttons
 const TextButton = styled(Button)({
-  color: 'white',
-  '&:hover': {
-    backgroundColor: '#1976d2',
+  color: "white",
+  "&:hover": {
+    backgroundColor: "#177be0",
   },
 });
 
@@ -20,11 +20,17 @@ const Header = () => {
 
         <nav className="flex-row">
           <TextButton variant="text" component={Link} to="/">
-            Dashboard
+            Home
+          </TextButton>
+          <TextButton variant="text" component={Link} to="/explorer">
+            Suburb Explorer
           </TextButton>
           <TextButton variant="text" href="https://app.swaggerhub.com/apis/zulu-89f/Zulu_transport_API/1.0.0">
-            Swagger API
+            APIs
           </TextButton>
+          <Button variant="contained" component={Link} to="/register">
+            Register
+          </Button>
           <Button variant="contained" component={Link} to="/login">
             Login
           </Button>

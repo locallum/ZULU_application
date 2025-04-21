@@ -17,6 +17,7 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           fontSize: '1rem',
+          backgroundColor: 'red',
         },
       },
     },
