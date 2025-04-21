@@ -44,6 +44,13 @@ const Header = () => {
     handleMenuClose();
   };
 
+  const handleLogout = () => {
+    localStorage.clear();
+    handleMenuClose();
+    navigate('/');
+    window.location.reload();
+  };
+
   return (
     <header className="header-container">
       <h2>ZULU Urban Metrics</h2>
@@ -77,6 +84,7 @@ const Header = () => {
               transformOrigin={{ vertical: 'top', horizontal: 'right' }}
             >
               <MenuItem onClick={handleViewGraphs}>View Saved Graphs</MenuItem>
+              <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
           </Box>
         ) : (

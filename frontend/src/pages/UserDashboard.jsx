@@ -1,8 +1,15 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
-  Card, CardContent, Button, Box, Typography,
-  Snackbar, Alert, CircularProgress, Avatar
+  Card, 
+  CardContent, 
+  Button, 
+  Box, 
+  Typography,
+  Snackbar, 
+  Alert, 
+  CircularProgress, 
+  Avatar
 } from '@mui/material';
 import profileImage from '../assets/images/profileImg.jpg';
 

@@ -4,6 +4,7 @@ const path = require("path");
 const cors = require("cors");
 const app = express();
 app.use(cors());
+app.use(express.json());
 
 const port = process.env.PORT || 3000;
 
@@ -80,6 +81,33 @@ app.get("/visualisation", async (req, res) => {
     res.json(response.data);
   } catch (error) {
     res.status(500).send("Error fetching data from visualisation API");
+  }
+});
+
+//-------------------------UPLOAD (S3) CALLS-------------------------\\
+app.post("/save/graph", async (req, res) => {
+  const { suburbs, username, image_base64 } = req.body;
+  const authHeader = req.headers.authorization;
+
+  if (!username || !authHeader || !suburbs || !image_base64) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+
+  try {
+    const response = await axios.post(`${trafficRetrievalURL}/upload-graph/v1`, {
+      suburbs,
+      username,
+      "image-base64": image_base64,
+    }, {
+      headers: {
+        Authorization: authHeader,
+      },
+    });
+
+    res.json(response.data);
+  } catch (error) {
+    console.error("Error saving graph:", error?.response?.data || error.message);
+    res.status(500).json({ error: 'Failed to save graph' });
   }
 });
 
