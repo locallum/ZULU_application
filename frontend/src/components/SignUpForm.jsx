@@ -9,29 +9,29 @@ import {
   Typography,
 } from '@mui/material';
 
-export default function SignUpForm({ onSuccess }) {
+export default function SignUpForm({ onSuccess, showSnackBar }) {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [snack, setSnack] = useState({ open: false, message: '', severity: 'error' });
+  // const [snack, setSnack] = useState({ open: false, message: '', severity: 'error' });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!email || !password || !username) {
-      setSnack({ open: true, message: 'Please enter username, email and password!', severity: 'warning' });
+      showSnackBar('Please enter username, email and password!', 'warning');
       return;
     }
 
     try {
       await signUp(username, email, password);
-      setSnack({ open: true, message: 'Sign up successful! Check your email.', severity: 'success' });
+      // setSnack({ open: true, message: 'Sign up successful! Check your email.', severity: 'success' });
       setTimeout(() => {
         onSuccess(email, username);
-      }, 500);
+      }, 100);
       // onSuccess(email, username);
     } catch (err) {
-      setSnack({ open: true, message: err.message, severity: 'error' });
+      showSnackBar(err.message, 'error');
     }
   };
 
@@ -72,7 +72,7 @@ export default function SignUpForm({ onSuccess }) {
         </Stack>
       </form>
 
-      <Snackbar
+      {/* <Snackbar
         open={snack.open}
         autoHideDuration={4000}
         onClose={() => setSnack({ ...snack, open: false })}
@@ -81,7 +81,7 @@ export default function SignUpForm({ onSuccess }) {
         <Alert severity={snack.severity} variant="filled" sx={{ width: '100%' }}>
           {snack.message}
         </Alert>
-      </Snackbar>
+      </Snackbar> */}
     </>
   );
 }
