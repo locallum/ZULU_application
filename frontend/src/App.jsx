@@ -9,6 +9,7 @@ import SuburbExplorer from './pages/SuburbExplorer';
 import UserDashboard from './pages/UserDashboard';
 import Register from './pages/Register';
 import Login from './pages/Login';
+import AuthPage from './pages/AuthPage';
 
 const theme = createTheme({ cssVariables: true });
 
@@ -22,10 +23,9 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route path="/explorer" element={<SuburbExplorer />} />
             <Route path="/dashboard" element={<UserDashboard />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
             <Route index element={<Home />} />
           </Route>
+          <Route path="/login" element={<AuthPage />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
