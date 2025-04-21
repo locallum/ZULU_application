@@ -3,7 +3,7 @@ import FormControl from "@mui/material/FormControl";
 import Typography from "@mui/material/Typography";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
-import {Button, Chip, ToggleButton, ToggleButtonGroup} from "@mui/material";
+import { Button, Chip, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import Box from "@mui/material/Box";
 
 import SuburbOptions from "../assets/SuburbOptions";
@@ -32,8 +32,8 @@ const styles = {
     paddingRight: "10px",
     marginBottom: "8px",
   },
-  chipContainer: ({
-    height:  "120px",
+  chipContainer: {
+    height: "120px",
     border: "var(--subtle) solid 1px",
     borderRadius: "8px",
     overflowY: "auto",
@@ -44,7 +44,7 @@ const styles = {
     alignItems: "flex-start",
     justifyContent: "flex-start",
     gap: "8px",
-  }),
+  },
   chip: {
     borderRadius: "10px",
     height: "28px",
@@ -61,75 +61,145 @@ const GraphBox = ({
                     selected,
                     addSelected,
                     removeSelected,
-                    setResultsImg
+                    setResultsImg,
                   }) => {
   const [autocompleteValue, setAutocompleteValue] = useState(null);
   const [startYear, setStartYear] = useState("");
   const [endYear, setEndYear] = useState("");
   const [platform, setPlatform] = useState("population");
   const [loading, setLoading] = useState(false);
+  const [startYearError, setStartYearError] = useState("");
+  const [endYearError, setEndYearError] = useState("");
 
-  // Reset form input values
-   const handleReset = () => {
+  const handleReset = () => {
     setAutocompleteValue(null);
     setStartYear("");
     setEndYear("");
     setResultsImg("");
+    setStartYearError("");
+    setEndYearError("");
     SuburbOptions.forEach((suburb) => removeSelected(suburb));
   };
 
   const generateGraph = async () => {
-    try {
-      setLoading(true);
-      const params = new URLSearchParams({
-        startYear: startYear,
-        endYear: endYear,
-      });
-      params.append("suburbs", `[${selected}]`);
-      console.log(params.toString()); // check final URL
+    // Reset previous error messages
+    setStartYearError("");
+    setEndYearError("");
 
-      const response = await fetch(`/retrieve/population?${params}`);
+    let hasError = false;
+    const start = parseInt(startYear);
+    const end = parseInt(endYear);
 
-      const data = await response.json();
-      console.log(data.suburbsPopulationEstimates[0]);
+    const minYear = platform === "traffic" ? 2006 : 2021;
+    const maxYear = platform === "traffic" ? 2020 : 2066;
 
-      let graphTitle = "Population Projection: ";
-      data.suburbsPopulationEstimates.forEach((suburb) => {
-        graphTitle += `${suburb.suburb} `;
-      })
+    if (isNaN(start) || start < minYear || start > maxYear) {
+      setStartYearError(`Start year must be between ${minYear} and ${maxYear}`);
+      hasError = true;
+    }
 
-      const labels = data.suburbsPopulationEstimates
-        .map((suburb) => suburb.suburb)
-        .join(',');
-
-      const yData = data.suburbsPopulationEstimates
-        .map((suburb) => suburb.estimates.join('-'))
-        .join(',');
+    if (isNaN(end) || end < minYear || end > maxYear) {
+      setEndYearError(`End year must be between ${minYear} and ${maxYear}`);
+      hasError = true;
+    }
 
 
-      const visParams = new URLSearchParams();
-      visParams.append("title", graphTitle);
-      visParams.append("x_header", "Years");
-      visParams.append("y_header", "Population");
-      visParams.append("labels", labels);
-      visParams.append("x_data", data.suburbsPopulationEstimates[0].years);
-      visParams.append("y_data", yData);
+    if (!hasError && start > end) {
+      setStartYearError("Start year must be less than or equal to end year");
+      setEndYearError("End year must be greater than or equal to start year");
+      hasError = true;
+    }
 
-      console.log(visParams.toString());
+    if (hasError) return;
 
-      const visResponse = await fetch(`/visualisation?${visParams}`);
+    if (platform === "population") {
+      try {
+        setLoading(true);
+        const params = new URLSearchParams({
+          startYear: startYear,
+          endYear: endYear,
+        });
+        params.append("suburbs", `[${selected}]`);
 
-      const visData = await visResponse.json();
-      const parsedVisData = JSON.parse(visData.body);
-      console.log(visData);
+        const response = await fetch(`/retrieve/population?${params}`);
+        const data = await response.json();
 
-      setResultsImg(parsedVisData.image);
+        let graphTitle = "Population Projection: ";
+        data.suburbsPopulationEstimates.forEach((suburb) => {
+          graphTitle += `${suburb.suburb} `;
+        });
 
-      return data;
-    } catch (error) {
-      console.error(error.message);
-    } finally {
-      setLoading(false);
+        const labels = data.suburbsPopulationEstimates
+          .map((suburb) => suburb.suburb)
+          .join(",");
+
+        const yData = data.suburbsPopulationEstimates
+          .map((suburb) => suburb.estimates.join("-"))
+          .join(",");
+
+        const visParams = new URLSearchParams();
+        visParams.append("title", graphTitle);
+        visParams.append("x_header", "Years");
+        visParams.append("y_header", "Population");
+        visParams.append("labels", labels);
+        visParams.append("x_data", data.suburbsPopulationEstimates[0].years);
+        visParams.append("y_data", yData);
+
+        const visResponse = await fetch(`/visualisation?${visParams}`);
+        const visData = await visResponse.json();
+        const parsedVisData = JSON.parse(visData.body);
+
+        setResultsImg(parsedVisData.image);
+        return data;
+      } catch (error) {
+        console.error(error.message);
+      } finally {
+        setLoading(false);
+      }
+    } else if (platform === "traffic") {
+      try {
+        setLoading(true);
+        const params = new URLSearchParams({
+          startYear: startYear,
+          endYear: endYear,
+        });
+        params.append("suburbs", `${selected}`);
+        const response = await fetch(`/retrieve/traffic?${params}`);
+        const data = await response.json();
+
+        let graphTitle = "Traffic History: ";
+        data.suburbsAvgTraffic.forEach((suburb) => {
+          graphTitle += `${suburb.suburb} `;
+        });
+
+        const labels = data.suburbsAvgTraffic
+          .map((suburb) => suburb.suburb)
+          .join(",");
+
+        const yData = data.suburbsAvgTraffic
+          .map((suburb) => suburb.avg_traffic.join("-"))
+          .join(",");
+
+        const visParams = new URLSearchParams();
+        visParams.append("title", graphTitle);
+        visParams.append("x_header", "Years");
+        visParams.append("y_header", "Population");
+        visParams.append("labels", labels);
+        visParams.append("x_data", data.suburbsAvgTraffic[0].years);
+        visParams.append("y_data", yData);
+
+        const visResponse = await fetch(`/visualisation?${visParams}`);
+        const visData = await visResponse.json();
+        const parsedVisData = JSON.parse(visData.body);
+
+        setResultsImg(parsedVisData.image);
+
+        return data;
+      } catch (error) {
+        console.error(error.message);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -142,6 +212,7 @@ const GraphBox = ({
         fullWidth
         onChange={(event, newValue) => {
           if (newValue !== null) {
+            handleReset(); // Reset inputs when platform changes
             setPlatform(newValue);
           }
         }}
@@ -151,11 +222,12 @@ const GraphBox = ({
         <ToggleButton value="population">Population</ToggleButton>
         <ToggleButton value="traffic">Traffic</ToggleButton>
       </ToggleButtonGroup>
+
+
       <div style={{ paddingLeft: "20px", paddingRight: "20px" }}>
         <FormControl fullWidth sx={{ p: 2 }}>
           <Typography sx={styles.dropdownHint}>
-            Select up to 3 suburbs on the map, or
-            search using the dropdown menu below:
+            Select up to 3 suburbs on the map, or search using the dropdown menu below:
           </Typography>
 
           <Autocomplete
@@ -188,19 +260,24 @@ const GraphBox = ({
           </div>
 
           <Typography sx={styles.dropdownHint}>
-            Select a year range between 2021 and 2066:
+            Select a year range between {platform === "traffic" ? "2006 and 2020" : "2021 and 2066"}:
           </Typography>
+
           <Box sx={{ display: "flex", flexDirection: "row", gap: 2, mt: 1 }}>
             <TextField
               label="Start Year"
               value={startYear}
               onChange={(e) => setStartYear(e.target.value)}
+              error={!!startYearError}
+              helperText={startYearError}
               fullWidth
             />
             <TextField
               label="End Year"
               value={endYear}
               onChange={(e) => setEndYear(e.target.value)}
+              error={!!endYearError}
+              helperText={endYearError}
               fullWidth
             />
           </Box>

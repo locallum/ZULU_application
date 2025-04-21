@@ -9,7 +9,7 @@ const port = process.env.PORT || 3000;
 
 const populationRetrievalURL =
   "https://slzykzeusf.execute-api.us-east-1.amazonaws.com/prod/";
-const trafficRetrievalURL = "https://ga1wu9p0i0.execute-api.us-east-1.amazonaws.com/dev"
+const trafficRetrievalURL = "https://ga1wu9p0i0.execute-api.us-east-1.amazonaws.com/dev/"
 const visualisationURL =
   "https://f8jc59emd2.execute-api.us-east-1.amazonaws.com/dev/";
 
@@ -26,15 +26,15 @@ app.get("/retrieve/population", async (req, res) => {
   }
 });
 
-app.get("/retrieve/population", async (req, res) => {
+app.get("/retrieve/traffic", async (req, res) => {
   const { suburbs, startYear, endYear } = req.query;
   try {
-    const response = await axios.get(`${trafficRetrievalURL}populations/v1`, {
+    const response = await axios.get(`${trafficRetrievalURL}traffic/yearly-avg/v1`, {
       params: { suburbs, startYear, endYear },
     });
     res.json(response.data);
   } catch (error) {
-    res.status(500).send("Error fetching data from traffic retrieval API");
+    res.status(500).send("Error fetching data from population retrieval API");
   }
 });
 
