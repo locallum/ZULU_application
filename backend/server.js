@@ -38,6 +38,27 @@ app.get("/retrieve/population", async (req, res) => {
   }
 });
 
+app.get("/retrieve/graphs", async (req, res) => {
+  const { username } = req.query;
+  const authHeader = req.headers.authorization;
+
+  if (!username || !authHeader) {
+    return res.status(400).json({ error: 'Missing username or token' });
+  }
+
+  try {
+    const response = await axios.get(`${trafficRetrievalURL}/download-graphs/v1`, {
+      params: { username },
+      headers: {
+        Authorization: authHeader,
+      },
+    });
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
 //-------------------------VISUALISATION CALLS-------------------------\\
 app.get("/visualisation", async (req, res) => {
   const { title, x_header, y_header, labels, x_data, y_data } = req.query;

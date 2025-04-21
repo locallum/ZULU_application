@@ -62,7 +62,7 @@ export const saveTokens = async () => {
     return {
       name,
       accessToken,
-      idToken,
+      username,
     };
   } catch (error) {
     throw error;
