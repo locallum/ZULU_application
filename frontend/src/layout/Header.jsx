@@ -25,7 +25,7 @@ const Header = () => {
           <TextButton variant="text" component={Link} to="/explorer">
             Suburb Explorer
           </TextButton>
-          <TextButton variant="text" component={Link} to="/apis">
+          <TextButton variant="text" href="https://app.swaggerhub.com/apis/zulu-89f/Zulu_transport_API/1.0.0">
             APIs
           </TextButton>
           <Button variant="contained" component={Link} to="/login">

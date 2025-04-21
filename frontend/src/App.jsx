@@ -10,7 +10,6 @@ import UserDashboard from './pages/UserDashboard';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import AuthPage from './pages/AuthPage';
-import SwaggerUI from './pages/SwaggerUI';
 
 const theme = createTheme({ cssVariables: true });
 
@@ -24,7 +23,6 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route path="/explorer" element={<SuburbExplorer />} />
             <Route path="/dashboard" element={<UserDashboard />} />
-            <Route path="/apis" element={<SwaggerUI />} />
             <Route index element={<Home />} />
           </Route>
           <Route path="/login" element={<AuthPage />} />
