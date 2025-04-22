@@ -43,7 +43,7 @@ export default function SignInForm({ onSuccess, showSnackBar }) {
       </Typography>
 
       <form onSubmit={handleSubmit}>
-        <Stack spacing={2}>
+        <Stack spacing={3}>
           <TextField
             label="Email"
             type="email"

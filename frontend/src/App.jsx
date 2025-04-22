@@ -12,7 +12,12 @@ import Login from './pages/Login';
 import AuthPage from './pages/AuthPage';
 import SwaggerPage from './pages/SwaggerUI';
 
-const theme = createTheme({ cssVariables: true });
+const theme = createTheme({ 
+  cssVariables: true,
+  typography: {
+    fontFamily: 'Montserrat, sans-serif',
+  }
+});
 
 function App() {
   document.title = 'ZULU UrbanMetrics';
