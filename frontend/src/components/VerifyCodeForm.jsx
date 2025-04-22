@@ -9,10 +9,10 @@ import {
   Typography,
 } from '@mui/material';
 
-export default function VerifyCodeForm({ email, username, onSuccess }) {
+export default function VerifyCodeForm({ email, username, onSuccess, showSnackBar }) {
   const [code, setCode] = useState(Array(6).fill(''));
   const inputsRef = useRef([]);
-  const [snack, setSnack] = useState({ open: false, message: '', severity: 'error' });
+  // const [snack, setSnack] = useState({ open: false, message: '', severity: 'error' });
 
   const handleChange = (i, val) => {
     const newCode = [...code];
@@ -43,18 +43,18 @@ export default function VerifyCodeForm({ email, username, onSuccess }) {
     e.preventDefault();
     const fullCode = code.join('');
     if (fullCode.length < 6) {
-      setSnack({ open: true, message: 'Please enter all 6 digits.', severity: 'warning' });
+      showSnackBar('Please enter all 6 digits', 'warning');
       return;
     }
 
     try {
       await confirmSignUp(email, username, fullCode);
-      setSnack({ open: true, message: 'Verification successful!', severity: 'success' });
+      showSnackBar('Email verification successful!', 'success');
       setTimeout(() => {
         onSuccess();
-      }, 500);
+      }, 100);
     } catch (err) {
-      setSnack({ open: true, message: err.message, severity: 'error' });
+      showSnackBar(err.message, 'error');
     }
   };
 
@@ -93,14 +93,14 @@ export default function VerifyCodeForm({ email, username, onSuccess }) {
         </Stack>
       </form>
 
-      <Snackbar 
+      {/* <Snackbar 
         open={snack.open} 
         autoHideDuration={4000} 
         onClose={() => setSnack({ ...snack, open: false })}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
         <Alert severity={snack.severity}>{snack.message}</Alert>
-      </Snackbar>
+      </Snackbar> */}
     </>
   );
 }
