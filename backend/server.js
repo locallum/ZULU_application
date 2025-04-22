@@ -55,7 +55,7 @@ function generatePrompt(formattedString, platform) {
     ? "Compare the population projections of these suburbs. Highlight up to 4 key points: include which suburb has the highest growth (and by how much). Include percentages where you can, but dont overdo it."
     : "Compare the traffic trends across the suburbs. Highlight up to 4 key points: include which suburb has the highest traffic growth (historically) (and by how much). Only show the insights, not any considerations to consider please. Include percentages where you can, but dont overdo it.";
 
-  return `${promptIntro}${formattedString.trim()}\n\n${insightInstruction}. THIS MUST BE AT MOST 300 WORDS IN TOTAL. Round all numbers down to the nearest number. Be careful in analysis of percentages`;
+  return `${promptIntro}${formattedString.trim()}\n\n${insightInstruction}. THIS MUST BE AT MOST 250 WORDS IN TOTAL. Round all numbers down to the nearest number. Be careful in analysis of percentages. In the initial (bolded) part of each point, make it actionable. Rather than 'initial growth' for example, attach a suburb or stat to it as well (without adding action verbs like investigate or quantify).`;
 }
 
 async function fetchGemini(promptText) {

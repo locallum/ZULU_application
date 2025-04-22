@@ -100,7 +100,7 @@ const UserDashboard = () => {
           </Typography>
         </Box>
       ) : (
-        <div className="graphs-list" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
+        <div className="graphs-list" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px' }}>
           {graphs.map((graph, index) => (
             <Card key={index} sx={{ width: '100%', boxShadow: 3 }}>
               <CardContent>
@@ -113,7 +113,13 @@ const UserDashboard = () => {
                     <img
                       src={`data:image/png;base64,${graph.base64_image}`}
                       alt="Graph Preview"
-                      style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }}
+                      style={{
+                        width: '100%',
+                        height: 'auto',
+                        maxHeight: '250px',
+                        display: 'block',
+                        margin: '0 auto',
+                      }}
                     />
                   </Box>
                 )}
