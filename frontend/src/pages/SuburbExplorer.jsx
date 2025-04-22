@@ -1,55 +1,67 @@
-import { useEffect, useState } from "react";
-import GraphBox from "../components/GraphBox";
-import MapboxMap from "../components/MapboxMap";
+import { useEffect, useRef, useState } from "react";
 import "./SuburbExplorer.css";
+import GraphBox from "../components/GraphBox.jsx";
+import MapboxMap from "../components/MapboxMap.jsx";
+import ResultsPage from "../components/ResultsPage.jsx";
 
 const Dashboard = () => {
   const [selected, setSelected] = useState([]);
-  const [isMultiple, setIsMultiple] = useState(false);
+  const [resultsImg, setResultsImg] = useState("")
+  const [analysisData, setAnalysisData] = useState("");
+  const [platform, setPlatform] = useState("population");
+
+  const resultsRef = useRef(null);
 
   const addSelected = (newValue) => {
-    setIsMultiple((prevIsMultiple) => {
-      if (prevIsMultiple) {
-        setSelected((prevSelected) => {
-          if (!prevSelected.includes(newValue) && prevSelected.length < 3) {
-            return [...prevSelected, newValue];
-          }
-          return prevSelected;
-        });
-      } else {
-        setSelected(() => [newValue]);
+    setSelected((prevSelected) => {
+      if (!prevSelected.includes(newValue)) {
+        if (prevSelected.length < 3) {
+          return [...prevSelected, newValue];
+        }
       }
-      return prevIsMultiple;
+      return prevSelected;
     });
   };
 
   const removeSelected = (valueToRemove) => {
-    setSelected((prevSelected) => {
-      return prevSelected.filter((value) => value !== valueToRemove);
-    });
+    setSelected((prevSelected) =>
+      prevSelected.filter((value) => value !== valueToRemove)
+    );
   };
-
-  useEffect(() => {
-    setSelected([]);
-  }, [isMultiple]);
 
   useEffect(() => {
     console.log(selected);
   }, [selected]);
 
+  useEffect(() => {
+    if (resultsImg && resultsRef.current) {
+      resultsRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [resultsImg]);
+
+
   return (
     <>
       <GraphBox
-        isMultiple={isMultiple}
-        setIsMultiple={setIsMultiple}
         selected={selected}
         addSelected={addSelected}
         removeSelected={removeSelected}
+        setResultsImg={setResultsImg}
+        setAnalysisData={setAnalysisData}
+        platform={platform}
+        setPlatform={setPlatform}
       />
       <MapboxMap
         selected={selected}
         addSelected={addSelected}
         removeSelected={removeSelected}
+      />
+      <ResultsPage
+        selected={selected}
+        resultsImg={resultsImg}
+        analysisData={analysisData}
+        platform={platform}
+        targetRef={resultsRef}
       />
     </>
   );
