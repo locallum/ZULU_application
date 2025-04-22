@@ -7,6 +7,8 @@ import ResultsPage from "../components/ResultsPage.jsx";
 const Dashboard = () => {
   const [selected, setSelected] = useState([]);
   const [resultsImg, setResultsImg] = useState("")
+  const [analysisData, setAnalysisData] = useState("");
+  const [platform, setPlatform] = useState("population");
 
   const resultsRef = useRef(null);
 
@@ -45,18 +47,22 @@ const Dashboard = () => {
         addSelected={addSelected}
         removeSelected={removeSelected}
         setResultsImg={setResultsImg}
+        setAnalysisData={setAnalysisData}
+        platform={platform}
+        setPlatform={setPlatform}
       />
       <MapboxMap
         selected={selected}
         addSelected={addSelected}
         removeSelected={removeSelected}
       />
-      <div ref={resultsRef} style={{ padding: "0px" }}>
-        <ResultsPage
-          selected={selected}
-          resultsImg={resultsImg}
-        />
-      </div>
+      <ResultsPage
+        selected={selected}
+        resultsImg={resultsImg}
+        analysisData={analysisData}
+        platform={platform}
+        targetRef={resultsRef}
+      />
     </>
   );
 };
