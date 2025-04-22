@@ -18,6 +18,26 @@ const visualisationURL =
 
 
 
+// function generatePrompt(formattedString, platform) {
+//   const isPopulation = platform === "population";
+
+//   const promptIntro = isPopulation
+//     ? "Here is population projection data for one or more suburbs:\n\n"
+//     : "Here is average traffic data for one or more suburbs:\n\n";
+
+//   const isSingleSuburb = (formattedString.match(/Suburb:/g) || []).length === 1;
+
+//   const insightInstruction = isSingleSuburb
+//     ? isPopulation
+//       ? "Analyse the population projection for this suburb. Mention notable trends or patterns with percentages and stats. Have a good mix between percents and stats. Include percentages where you can, but dont overdo it. Keep it brief (max 4 key points)."
+//       : "Analyse the traffic trends for this suburb. Mention notable trends or patterns with percentages and stats. Have a good mix between percents and stats. Include percentages where you can, but dont overdo it. Keep it brief (max 4 key points)."
+//     : isPopulation
+//     ? "Compare the population projections of these suburbs. Highlight up to 4 key points: include which suburb has the highest growth (and by how much). Have a good mix between percents and stats. Include percentages where you can, but dont overdo it."
+//     : "Compare the traffic trends across the suburbs. Highlight up to 4 key points: include which suburb has the highest traffic growth (historically) (and by how much). Have a good mix between percents and stats. Include percentages where you can, but dont overdo it. Only show the insights, not any considerations to consider please.";
+
+//   return `${promptIntro}${formattedString.trim()}\n\n${insightInstruction}. THIS MUST BE AT MOST 200 WORDS IN TOTAL. Round all numbers down to the nearest number.`;
+// }
+
 function generatePrompt(formattedString, platform) {
   const isPopulation = platform === "population";
 
@@ -29,13 +49,13 @@ function generatePrompt(formattedString, platform) {
 
   const insightInstruction = isSingleSuburb
     ? isPopulation
-      ? "Analyse the population projection for this suburb. Mention notable trends or patterns with percentages and stats. Have a good mix between percents and stats. Include percentages where you can, but dont overdo it. Keep it brief (max 4 key points)."
-      : "Analyse the traffic trends for this suburb. Mention notable trends or patterns with percentages and stats. Have a good mix between percents and stats. Include percentages where you can, but dont overdo it. Keep it brief (max 4 key points)."
+      ? "Analyse the population projection for this suburb. Mention notable trends or patterns with percentages and stats. Include percentages where you can, but dont overdo it. Keep it brief (max 4 key points)."
+      : "Analyse the traffic trends for this suburb. Mention notable trends or patterns with percentages and stats. Include percentages where you can, but dont overdo it. Keep it brief (max 4 key points)."
     : isPopulation
-    ? "Compare the population projections of these suburbs. Highlight up to 4 key points: include which suburb has the highest growth (and by how much). Have a good mix between percents and stats. Include percentages where you can, but dont overdo it."
-    : "Compare the traffic trends across the suburbs. Highlight up to 4 key points: include which suburb has the highest traffic growth (historically) (and by how much). Have a good mix between percents and stats. Include percentages where you can, but dont overdo it. Only show the insights, not any considerations to consider please.";
+    ? "Compare the population projections of these suburbs. Highlight up to 4 key points: include which suburb has the highest growth (and by how much). Include percentages where you can, but dont overdo it."
+    : "Compare the traffic trends across the suburbs. Highlight up to 4 key points: include which suburb has the highest traffic growth (historically) (and by how much). Only show the insights, not any considerations to consider please. Include percentages where you can, but dont overdo it.";
 
-  return `${promptIntro}${formattedString.trim()}\n\n${insightInstruction}. THIS MUST BE AT MOST 200 WORDS IN TOTAL. Round all numbers down to the nearest number.`;
+  return `${promptIntro}${formattedString.trim()}\n\n${insightInstruction}. THIS MUST BE AT MOST 300 WORDS IN TOTAL. Round all numbers down to the nearest number. Be careful in analysis of percentages`;
 }
 
 async function fetchGemini(promptText) {
