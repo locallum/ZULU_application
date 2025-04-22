@@ -64,8 +64,8 @@ const Header = () => {
         </TextButton>
         <TextButton
           variant="text"
-          href="https://app.swaggerhub.com/apis/zulu-89f/Zulu_transport_API/1.0.0"
-          target="_blank"
+          component={Link}
+          to="/swagger"
         >
           APIs
         </TextButton>
