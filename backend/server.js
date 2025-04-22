@@ -29,8 +29,8 @@ function generatePrompt(formattedString, platform) {
 
   const insightInstruction = isSingleSuburb
     ? isPopulation
-      ? "Analyse the population projection for this suburb. Mention notable trends or patterns with percentages and stats. Keep it brief (max 4 key points)."
-      : "Analyse the traffic trends for this suburb. Mention notable trends or patterns with percentages and stats. Keep it brief (max 4 key points)."
+      ? "Analyse the population projection for this suburb. Mention notable trends or patterns with percentages and stats. Have a good mix between percents and stats. Keep it brief (max 4 key points)."
+      : "Analyse the traffic trends for this suburb. Mention notable trends or patterns with percentages and stats. Have a good mix between percents and stats. Keep it brief (max 4 key points)."
     : isPopulation
     ? "Compare the population projections of these suburbs. Highlight up to 4 key points: include which suburb has the highest growth (and by how much)."
     : "Compare the traffic trends across the suburbs. Highlight up to 4 key points: include which suburb has the highest traffic growth (historically) (and by how much). Only show the insights, not any considerations to consider please.";
