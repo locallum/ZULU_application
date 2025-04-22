@@ -11,7 +11,7 @@ import SuburbOptions from "../assets/SuburbOptions";
 const styles = {
   graphBox: {
     position: "absolute",
-    top: "80px",
+    top: "95px",
     right: "30px",
     width: "360px",
     background: "var(--background-primary)",

@@ -51,17 +51,18 @@ export const saveTokens = async () => {
     const session = await fetchAuthSession();
 
     const name = user.name
+    const username = user.sub
     const accessToken = session.tokens?.accessToken?.toString();
-    const idToken = session.tokens?.idToken?.toString();
+    // const idToken = session.tokens?.idToken?.toString();
 
     localStorage.setItem('name', name);
     localStorage.setItem('access_token', accessToken);
-    localStorage.setItem('id_token', idToken);
+    localStorage.setItem('username', username);
 
     return {
       name,
       accessToken,
-      idToken,
+      username,
     };
   } catch (error) {
     throw error;

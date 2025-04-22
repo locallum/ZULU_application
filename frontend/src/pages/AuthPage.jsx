@@ -6,6 +6,8 @@ import {
   Button,
   useTheme,
   useMediaQuery,
+  Snackbar,
+  Alert
 } from '@mui/material';
 import SignUpForm from '../components/SignUpForm';
 import SignInForm from '../components/SignInForm';
@@ -13,14 +15,20 @@ import VerifyCodeForm from '../components/VerifyCodeForm';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/images/logo.png'
 
+
 export default function AuthPage() {
-  const [mode, setMode] = useState('signin'); // 'signup' or 'signin'
+  const [mode, setMode] = useState('signin');
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [showVerification, setShowVerification] = useState(false);
+  const [snack, setSnack] = useState({ open: false, message: '', severity: 'info' });
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  const showSnackBar = (message, severity = 'info') => {
+    setSnack({ open: true, message, severity });
+  };
 
   const handleVerified = () => {
     setMode('signin');
@@ -81,7 +89,9 @@ export default function AuthPage() {
                       setEmail(email);
                       setUsername(username);
                       setShowVerification(true);
+                      showSnackBar('Sign up successful! Check your email.', 'success');
                     }}
+                    showSnackBar={showSnackBar}
                   />
                   <Button onClick={() => setMode('signin')} sx={{ mt: 2 }}>
                     Already have an account? Sign In
@@ -94,6 +104,7 @@ export default function AuthPage() {
                       setEmail(email);
                       handleVerified();
                     }}
+                    showSnackBar={showSnackBar}
                   />
                   <Button onClick={() => setMode('signup')} sx={{ mt: 2 }}>
                     Don't have an account? Sign Up
@@ -101,7 +112,7 @@ export default function AuthPage() {
                 </>
               )
             ) : (
-              <VerifyCodeForm email={email} username={username} onSuccess={handleRegistered} />
+              <VerifyCodeForm email={email} username={username} onSuccess={handleRegistered} showSnackBar={showSnackBar} />
             )}
           </Box>
 
@@ -117,6 +128,16 @@ export default function AuthPage() {
           />
         </Paper>
       </Box>
+      <Snackbar
+        open={snack.open}
+        autoHideDuration={4000}
+        onClose={() => setSnack({ ...snack, open: false })}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert severity={snack.severity} variant="filled" sx={{ width: '100%' }}>
+          {snack.message}
+        </Alert>
+      </Snackbar>
     </>
   );
 }
