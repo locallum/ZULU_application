@@ -15,27 +15,6 @@ import SwaggerPage from './pages/SwaggerUI';
 const theme = createTheme({ cssVariables: true });
 
 function App() {
-  const spec = {
-    openapi: '3.0.0',
-    info: {
-      title: 'My API',
-      description: 'API documentation',
-      version: '1.0.0',
-    },
-    paths: {
-      '/example': {
-        get: {
-          summary: 'Example endpoint',
-          responses: {
-            200: {
-              description: 'Successful response',
-            },
-          },
-        },
-      },
-    },
-  };
-
   document.title = 'ZULU UrbanMetrics';
 
   return (
