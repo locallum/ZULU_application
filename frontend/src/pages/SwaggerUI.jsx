@@ -1,7 +1,7 @@
 import React from 'react';
 import SwaggerUI from "swagger-ui-react";
 import "swagger-ui-react/swagger-ui.css";
-import SwaggerDoc from "./src/assets/swagger.json";
+import SwaggerDoc from "../assets/swagger.json";
 
 /**
  * The SwaggerPage displays the Swagger UI for the API documentation.
