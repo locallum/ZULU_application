@@ -52,8 +52,8 @@ function generatePrompt(formattedString, platform) {
       ? "Analyse the population projection for this suburb. Mention notable trends or patterns with percentages and stats. Include percentages where you can, but dont overdo it. Keep it brief (max 4 key points)."
       : "Analyse the traffic trends for this suburb. Mention notable trends or patterns with percentages and stats. Include percentages where you can, but dont overdo it. Keep it brief (max 4 key points)."
     : isPopulation
-    ? "Compare the population projections of these suburbs. Highlight up to 4 key points: include which suburb has the highest growth (and by how much). Include percentages where you can, but dont overdo it."
-    : "Compare the traffic trends across the suburbs. Highlight up to 4 key points: include which suburb has the highest traffic growth (historically) (and by how much). Only show the insights, not any considerations to consider please. Include percentages where you can, but dont overdo it.";
+      ? "Compare the population projections of these suburbs. Highlight up to 4 key points: include which suburb has the highest growth (and by how much). Include percentages where you can, but dont overdo it."
+      : "Compare the traffic trends across the suburbs. Highlight up to 4 key points: include which suburb has the highest traffic growth (historically) (and by how much). Only show the insights, not any considerations to consider please. Include percentages where you can, but dont overdo it.";
 
   return `${promptIntro}${formattedString.trim()}\n\n${insightInstruction}. THIS MUST BE AT MOST 250 WORDS IN TOTAL. Round all numbers down to the nearest number. Be careful in analysis of percentages. In the initial (bolded) part of each point, make it actionable. Rather than 'initial growth' for example, attach a suburb or stat to it as well (without adding action verbs like investigate or quantify).`;
 }
@@ -89,7 +89,7 @@ async function fetchGemini(promptText) {
   }
 }
 
-  
+
 
 //---------------------------RETRIEVAL CALLS---------------------------\\
 app.get("/retrieve/population", async (req, res) => {
@@ -138,15 +138,15 @@ app.get("/retrieve/graphs", async (req, res) => {
 });
 
 //-------------------------VISUALISATION CALLS-------------------------\\
-app.get("/visualisation", async (req, res) => {
+app.post("/visualisation", async (req, res) => {
   const { title, x_header, y_header, labels, x_data, y_data } = req.query;
 
   try {
-    const response = await axios.get(
-      `${visualisationURL}populations/visualisation/v1`,
+    const response = await axios.post(
+      `${visualisationURL}populations/visualisation/v1`, null,
       {
         params: {
-          graphTitle: title,
+          "graphTitle": title,
           "x-header": x_header,
           "y-header": y_header,
           "labels": labels,
@@ -158,6 +158,7 @@ app.get("/visualisation", async (req, res) => {
     res.json(response.data);
   } catch (error) {
     res.status(500).send("Error fetching data from visualisation API");
+    console.log(error);
   }
 });
 
@@ -185,6 +186,28 @@ app.post("/save/graph", async (req, res) => {
   } catch (error) {
     console.error("Error saving graph:", error?.response?.data || error.message);
     res.status(500).json({ error: 'Failed to save graph' });
+  }
+});
+
+app.delete("/delete/graph", async (req, res) => {
+  const { username, fileName } = req.query;
+  const authHeader = req.headers.authorization;
+
+  if (!username || !authHeader || !fileName) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+
+  try {
+    const response = await axios.delete(`${trafficRetrievalURL}/delete-graph/v1`, {
+      params: { username, fileName },
+      headers: { Authorization: authHeader },
+    });
+
+    res.json(response.data);
+  } catch (error) {
+    console.error("Error deleting graph:", error?.response?.data || error.message);
+    res.status(500).json({ error: 'Failed to delete graph' });
+    console.log(error);
   }
 });
 

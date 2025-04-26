@@ -58,14 +58,14 @@ const styles = {
 };
 
 const GraphBox = ({
-                    selected,
-                    addSelected,
-                    removeSelected,
-                    setResultsImg,
-                    setAnalysisData,
-                    platform,
-                    setPlatform
-                  }) => {
+  selected,
+  addSelected,
+  removeSelected,
+  setResultsImg,
+  setAnalysisData,
+  platform,
+  setPlatform
+}) => {
   const [autocompleteValue, setAutocompleteValue] = useState(null);
   const [startYear, setStartYear] = useState("");
   const [endYear, setEndYear] = useState("");
@@ -73,7 +73,7 @@ const GraphBox = ({
   const [loading, setLoading] = useState(false);
   const [startYearError, setStartYearError] = useState("");
   const [endYearError, setEndYearError] = useState("");
-  
+
 
   const handleReset = () => {
     setAutocompleteValue(null);
@@ -87,7 +87,7 @@ const GraphBox = ({
 
   function formatPopulationData(data) {
     const { suburbsPopulationEstimates } = data;
-  
+
     return suburbsPopulationEstimates.map(suburbData => {
       const suburb = suburbData.suburb;
       const estimates = JSON.stringify(suburbData.estimates);
@@ -98,7 +98,7 @@ const GraphBox = ({
 
   function formatTrafficData(data) {
     const { suburbsAvgTraffic } = data;
-  
+
     return suburbsAvgTraffic.map(suburbData => {
       const suburb = suburbData.suburb;
       const estimates = JSON.stringify(suburbData.avg_traffic);
@@ -106,7 +106,7 @@ const GraphBox = ({
       return `Suburb: ${suburb}\navg_traffic_count: ${estimates}\nYears: ${years}`;
     }).join("\n\n");
   }
-  
+
 
   const generateGraph = async () => {
     // Reset previous error messages
@@ -175,7 +175,9 @@ const GraphBox = ({
         visParams.append("x_data", data.suburbsPopulationEstimates[0].years);
         visParams.append("y_data", yData);
 
-        const visResponse = await fetch(`/visualisation?${visParams}`);
+        const visResponse = await fetch(`/visualisation?${visParams}`, {
+          method: 'POST'
+        });
         const visData = await visResponse.json();
         const parsedVisData = JSON.parse(visData.body);
 
@@ -211,7 +213,7 @@ const GraphBox = ({
         const yData = data.suburbsAvgTraffic
           .map((suburb) => suburb.avg_traffic.join("-"))
           .join(",");
-        
+
         console.log(data.suburbsAvgTraffic[0].years);
         console.log(yData);
 
@@ -225,7 +227,9 @@ const GraphBox = ({
         visParams.append("x_data", data.suburbsAvgTraffic[0].years);
         visParams.append("y_data", yData);
 
-        const visResponse = await fetch(`/visualisation?${visParams}`);
+        const visResponse = await fetch(`/visualisation?${visParams}`, {
+          method: 'POST'
+        });
         const visData = await visResponse.json();
         const parsedVisData = JSON.parse(visData.body);
 
