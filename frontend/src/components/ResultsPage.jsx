@@ -115,7 +115,7 @@ const ResultsPage = ({ selected, resultsImg, analysisData, platform, targetRef }
   
     if (!token || !username) {
       showSnackBar('User not authenticated', 'error');
-      setIsLoading(false);
+      setIsUploadLoading(false);
       return;
     }
   

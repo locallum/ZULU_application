@@ -150,7 +150,6 @@ const GraphBox = ({
 
         const response = await fetch(`/retrieve/population?${params}`);
         const data = await response.json();
-        console.log(data);
 
         let graphTitle = "Population Projection: ";
         data.suburbsPopulationEstimates.forEach((suburb) => {
@@ -198,7 +197,7 @@ const GraphBox = ({
         params.append("suburbs", `${selected}`);
         const response = await fetch(`/retrieve/traffic?${params}`);
         const data = await response.json();
-        console.log("DATA:", data);
+        // console.log("DATA:", data);
 
 
         let graphTitle = "Traffic History: ";
@@ -214,8 +213,8 @@ const GraphBox = ({
           .map((suburb) => suburb.avg_traffic.join("-"))
           .join(",");
 
-        console.log(data.suburbsAvgTraffic[0].years);
-        console.log(yData);
+        // console.log(data.suburbsAvgTraffic[0].years);
+        // console.log(yData);
 
         setAnalysisData(formatTrafficData(data));
 

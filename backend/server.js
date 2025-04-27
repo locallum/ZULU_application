@@ -11,7 +11,7 @@ app.use(express.json());
 const port = process.env.PORT || 3000;
 
 const populationRetrievalURL =
-  "https://nzukdmrh2b.execute-api.us-east-2.amazonaws.com/prod/";
+  "https://nzukdmrh2b.execute-api.us-east-2.amazonaws.com/dev/";
 const trafficRetrievalURL = "https://ga1wu9p0i0.execute-api.us-east-1.amazonaws.com/dev/"
 const visualisationURL =
   "https://ffkfzfk8t7.execute-api.us-east-1.amazonaws.com/dev/";
@@ -95,7 +95,7 @@ async function fetchGemini(promptText) {
 app.get("/retrieve/population", async (req, res) => {
   const { suburbs, startYear, endYear } = req.query;
   try {
-    const response = await axios.get(`${populationRetrievalURL}populations/v1`, {
+    const response = await axios.get(`${populationRetrievalURL}populations/v2`, {
       params: { suburbs, startYear, endYear },
     });
     res.json(response.data);
