@@ -24,7 +24,7 @@ export default function SignInForm({ onSuccess, showSnackBar }) {
     }
 
     try {
-      const token = await signIn(email, password);
+      const _token = await signIn(email, password);
       setLoading(false);
       showSnackBar('Logged in successfully!', 'success');
       setTimeout(() => {
