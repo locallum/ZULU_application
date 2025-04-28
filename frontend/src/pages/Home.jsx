@@ -1,11 +1,11 @@
 /**
  * The Home screen displays saved graphs for a signed-in user.
  */
-import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
 import './Home.css';
 import React from 'react';
 import { useState } from "react";
+import { Button } from '@mui/material';
 
 const tables = [
   {
@@ -61,16 +61,8 @@ const Home = () => {
     setCurrentIndex((prevIndex) => (prevIndex - 1 + tables.length) % tables.length);
   };
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     nextSlide();
-  //   }, 10000); // change slide every 10 seconds
-  //   return () => clearInterval(interval);
-  // }, []);
-
   return (
-    <div className="background">
-      {/* top of landing page */}
+    <div className="home-page">
       <div className="title-container" style={{marginLeft: "10%", marginTop: "8%"}}>
         <h1 className="home-title" style={{color: "white"}}>Urban Metrics</h1>
         <h4 className="home-slogan" style={{color: "white", marginBottom: "30px"}}>Plan smarter. Live better.</h4>
@@ -106,12 +98,12 @@ const Home = () => {
         <div className="data-box">
           <img src="continuous.png"/>
           <h4 className="blurb-title">Population Trends</h4>
-          <p>We provide population projections of LGAs across NSW starting from 2021 until 2066.</p>
+          <p>We provide residential population projections of LGAs across NSW starting from 2021 until 2066.</p>
         </div>
         <div className="data-box">
           <img src="personality.png"/>
           <h4 className="blurb-title">Demographic Insights</h4>
-          <p>We use census data to provide you insight into household demographics and behaviours.</p>
+          <p>We use census data to provide you insight into household travel demographics and behaviours.</p>
         </div>
       </div>
       {/* Trending statistics section with slideshow */}
@@ -120,36 +112,38 @@ const Home = () => {
           Trending Statistics
         </h2>
         {/* slideshow of statistics */}
-        {tables.map((table, index) => (
-          <div
-            key={index}
-            className={`mySlides ${index === currentIndex ? " active" : ""}`}
-            style={{ display: index === currentIndex ? "block" : "none" }}
-          >
-            <h3 style={{ textAlign: "center", marginBottom: "10px", color: "black" }}>{table.caption}</h3>
-            <table style={{marginBottom: "15px"}}>
-              <thead>
-                <tr>
-                  <th>Rank</th>
-                  <th>LGA Name</th>
-                  <th>Population Estimate (2025)</th>
-                </tr>
-              </thead>
-              <tbody>
-                {table.data.map((row, idx) => (
-                  <tr key={idx}>
-                    <td>{row[0]}</td>
-                    <td>{row[1]}</td>
-                    <td>{row[2]}</td>
+        <div className="slideshow-inner-container">
+          {tables.map((table, index) => (
+            <div
+              key={index}
+              className={`mySlides ${index === currentIndex ? " active" : ""}`}
+              style={{ display: index === currentIndex ? "block" : "none" }}
+            >
+              <h3 style={{ textAlign: "center", marginBottom: "2%", color: "black" }}>{table.caption}</h3>
+              <table style={{marginBottom: "2%", width: "60%"}}>
+                <thead>
+                  <tr>
+                    <th style={{width: "20%"}}>Rank</th>
+                    <th>LGA Name</th>
+                    <th>Population Estimate (2025)</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ))}
-        {/* Side buttons to move forwards or backwards on a slide */}
-        <a className="prev" onClick={prevSlide}>❮</a>
-        <a className="next" onClick={nextSlide}>❯</a>
+                </thead>
+                <tbody>
+                  {table.data.map((row, idx) => (
+                    <tr key={idx}>
+                      <td>{row[0]}</td>
+                      <td>{row[1]}</td>
+                      <td>{row[2]}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ))}
+          {/* Side buttons to move forwards or backwards on a slide */}
+          <a className="prev" onClick={prevSlide}>❮</a>
+          <a className="next" onClick={nextSlide}>❯</a>
+        </div>
         {/* Dotted buttons to select slide */}
         <div style={{ textAlign: "center", marginTop: "10px" }}>
           {tables.map((_, idx) => (
