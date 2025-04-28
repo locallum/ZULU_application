@@ -120,12 +120,24 @@ export default function AuthPage() {
           <Box
             sx={{
               flex: 1,
-              backgroundImage: `url(${logo})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              display: isMobile ? 'none' : 'block',
+              display: isMobile ? 'none' : 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              p: 2,
             }}
-          />
+          >
+            <img
+              src={logo}
+              alt="Urban Metrics Logo"
+              sx={{ borderRadius: '12px' }}
+              style={{
+                maxWidth: '80%',
+                height: 'auto',
+                objectFit: 'contain',
+                transform: 'scale(3.2)',
+              }}
+            />
+          </Box>
         </Paper>
       </Box>
       <Snackbar

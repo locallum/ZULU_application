@@ -82,6 +82,7 @@ const ResultsPage = ({ selected, resultsImg, analysisData, platform, targetRef }
     return bulletLines.map((line, index) => (
       <li
         key={index}
+        style={{ marginBottom: '12px', fontFamily: 'Montserrat, sans-serif' }}
         dangerouslySetInnerHTML={{
           __html: line
             .replace(/\*\*\*\*(.*?)\*\*\*\*/g, '<strong>$1</strong>')
@@ -114,7 +115,7 @@ const ResultsPage = ({ selected, resultsImg, analysisData, platform, targetRef }
   
     if (!token || !username) {
       showSnackBar('User not authenticated', 'error');
-      setIsLoading(false);
+      setIsUploadLoading(false);
       return;
     }
   

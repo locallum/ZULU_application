@@ -42,7 +42,7 @@ export default function SignUpForm({ onSuccess, showSnackBar }) {
       </Typography>
 
       <form onSubmit={handleSubmit}>
-        <Stack spacing={2}>
+        <Stack spacing={3}>
           <TextField
               label="Username"
               value={username}

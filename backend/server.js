@@ -11,12 +11,32 @@ app.use(express.json());
 const port = process.env.PORT || 3000;
 
 const populationRetrievalURL =
-  "https://nzukdmrh2b.execute-api.us-east-2.amazonaws.com/prod/";
+  "https://nzukdmrh2b.execute-api.us-east-2.amazonaws.com/dev/";
 const trafficRetrievalURL = "https://ga1wu9p0i0.execute-api.us-east-1.amazonaws.com/dev/"
 const visualisationURL =
   "https://ffkfzfk8t7.execute-api.us-east-1.amazonaws.com/dev/";
 
 
+
+// function generatePrompt(formattedString, platform) {
+//   const isPopulation = platform === "population";
+
+//   const promptIntro = isPopulation
+//     ? "Here is population projection data for one or more suburbs:\n\n"
+//     : "Here is average traffic data for one or more suburbs:\n\n";
+
+//   const isSingleSuburb = (formattedString.match(/Suburb:/g) || []).length === 1;
+
+//   const insightInstruction = isSingleSuburb
+//     ? isPopulation
+//       ? "Analyse the population projection for this suburb. Mention notable trends or patterns with percentages and stats. Have a good mix between percents and stats. Include percentages where you can, but dont overdo it. Keep it brief (max 4 key points)."
+//       : "Analyse the traffic trends for this suburb. Mention notable trends or patterns with percentages and stats. Have a good mix between percents and stats. Include percentages where you can, but dont overdo it. Keep it brief (max 4 key points)."
+//     : isPopulation
+//     ? "Compare the population projections of these suburbs. Highlight up to 4 key points: include which suburb has the highest growth (and by how much). Have a good mix between percents and stats. Include percentages where you can, but dont overdo it."
+//     : "Compare the traffic trends across the suburbs. Highlight up to 4 key points: include which suburb has the highest traffic growth (historically) (and by how much). Have a good mix between percents and stats. Include percentages where you can, but dont overdo it. Only show the insights, not any considerations to consider please.";
+
+//   return `${promptIntro}${formattedString.trim()}\n\n${insightInstruction}. THIS MUST BE AT MOST 200 WORDS IN TOTAL. Round all numbers down to the nearest number.`;
+// }
 
 function generatePrompt(formattedString, platform) {
   const isPopulation = platform === "population";
@@ -29,13 +49,13 @@ function generatePrompt(formattedString, platform) {
 
   const insightInstruction = isSingleSuburb
     ? isPopulation
-      ? "Analyse the population projection for this suburb. Mention notable trends or patterns with percentages and stats. Have a good mix between percents and stats. Include percentages where you can, but dont overdo it. Keep it brief (max 4 key points)."
-      : "Analyse the traffic trends for this suburb. Mention notable trends or patterns with percentages and stats. Have a good mix between percents and stats. Include percentages where you can, but dont overdo it. Keep it brief (max 4 key points)."
+      ? "Analyse the population projection for this suburb. Mention notable trends or patterns with percentages and stats. Include percentages where you can, but dont overdo it. Keep it brief (max 4 key points)."
+      : "Analyse the traffic trends for this suburb. Mention notable trends or patterns with percentages and stats. Include percentages where you can, but dont overdo it. Keep it brief (max 4 key points)."
     : isPopulation
-    ? "Compare the population projections of these suburbs. Highlight up to 4 key points: include which suburb has the highest growth (and by how much). Have a good mix between percents and stats. Include percentages where you can, but dont overdo it."
-    : "Compare the traffic trends across the suburbs. Highlight up to 4 key points: include which suburb has the highest traffic growth (historically) (and by how much). Have a good mix between percents and stats. Include percentages where you can, but dont overdo it. Only show the insights, not any considerations to consider please.";
+      ? "Compare the population projections of these suburbs. Highlight up to 4 key points: include which suburb has the highest growth (and by how much). Include percentages where you can, but dont overdo it."
+      : "Compare the traffic trends across the suburbs. Highlight up to 4 key points: include which suburb has the highest traffic growth (historically) (and by how much). Only show the insights, not any considerations to consider please. Include percentages where you can, but dont overdo it.";
 
-  return `${promptIntro}${formattedString.trim()}\n\n${insightInstruction}. THIS MUST BE AT MOST 200 WORDS IN TOTAL. Round all numbers down to the nearest number.`;
+  return `${promptIntro}${formattedString.trim()}\n\n${insightInstruction}. THIS MUST BE AT MOST 250 WORDS IN TOTAL. Round all numbers down to the nearest number. Be careful in analysis of percentages. In the initial (bolded) part of each point, make it actionable. Rather than 'initial growth' for example, attach a suburb or stat to it as well (without adding action verbs like investigate or quantify).`;
 }
 
 async function fetchGemini(promptText) {
@@ -69,13 +89,13 @@ async function fetchGemini(promptText) {
   }
 }
 
-  
+
 
 //---------------------------RETRIEVAL CALLS---------------------------\\
 app.get("/retrieve/population", async (req, res) => {
   const { suburbs, startYear, endYear } = req.query;
   try {
-    const response = await axios.get(`${populationRetrievalURL}populations/v1`, {
+    const response = await axios.get(`${populationRetrievalURL}populations/v2`, {
       params: { suburbs, startYear, endYear },
     });
     res.json(response.data);
@@ -118,15 +138,15 @@ app.get("/retrieve/graphs", async (req, res) => {
 });
 
 //-------------------------VISUALISATION CALLS-------------------------\\
-app.get("/visualisation", async (req, res) => {
+app.post("/visualisation", async (req, res) => {
   const { title, x_header, y_header, labels, x_data, y_data } = req.query;
 
   try {
-    const response = await axios.get(
-      `${visualisationURL}populations/visualisation/v1`,
+    const response = await axios.post(
+      `${visualisationURL}populations/visualisation/v1`, null,
       {
         params: {
-          graphTitle: title,
+          "graphTitle": title,
           "x-header": x_header,
           "y-header": y_header,
           "labels": labels,
@@ -138,6 +158,7 @@ app.get("/visualisation", async (req, res) => {
     res.json(response.data);
   } catch (error) {
     res.status(500).send("Error fetching data from visualisation API");
+    console.log(error);
   }
 });
 
@@ -165,6 +186,28 @@ app.post("/save/graph", async (req, res) => {
   } catch (error) {
     console.error("Error saving graph:", error?.response?.data || error.message);
     res.status(500).json({ error: 'Failed to save graph' });
+  }
+});
+
+app.delete("/delete/graph", async (req, res) => {
+  const { username, fileName } = req.query;
+  const authHeader = req.headers.authorization;
+
+  if (!username || !authHeader || !fileName) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+
+  try {
+    const response = await axios.delete(`${trafficRetrievalURL}/delete-graph/v1`, {
+      params: { username, fileName },
+      headers: { Authorization: authHeader },
+    });
+
+    res.json(response.data);
+  } catch (error) {
+    console.error("Error deleting graph:", error?.response?.data || error.message);
+    res.status(500).json({ error: 'Failed to delete graph' });
+    console.log(error);
   }
 });
 
