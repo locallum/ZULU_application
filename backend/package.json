@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "heroku-postbuild": "cd ../frontend && npm install && npm run build",
-    "lint": "eslint ."
+    "lint": "eslint eslint.config.mjs ."
   },
   "keywords": [],
   "author": "",
