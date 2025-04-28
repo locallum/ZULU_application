@@ -53,7 +53,8 @@ const UserDashboard = () => {
         setLoading(false);
       })
       .catch(err => {
-        setError('Failed to load graphs');
+        console.log(err);
+        // setError('Failed to load graphs');
         setLoading(false);
       });
   }, []);

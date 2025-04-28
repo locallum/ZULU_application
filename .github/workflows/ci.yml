@@ -1,0 +1,47 @@
+# This workflow will lint and build the React project.
+
+name: ZULU app CI
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+
+jobs:
+  dev:
+    runs-on: ubuntu-latest
+    # defaults:
+    #   run:
+    #     # Run all steps for this job in the frontend directory
+    #     working-directory: ./frontend
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Get Node version from .nvmrc file
+      run: echo ::set-output name=NODE_VERSION::$(cat .nvmrc)
+      id: nvm
+
+    - name: Install Node.js
+      uses: actions/setup-node@v4
+      with:
+        # Use Node version specified in .nvmrc file
+        node-version: ${{ steps.nvm.outputs.NODE_VERSION }}
+        cache: npm
+
+    - name: Clean install backend dependencies
+      run: cd backend && npm ci
+
+    - name: Clean install frontend dependencies
+      run: cd frontend && npm ci
+
+    - name: Lint backend code
+      run: cd backend && npm run lint
+    
+    - name: Lint frontend code
+      run: cd frontend && npm run lint
+
+    - name: Build project
+      run: npm run dev

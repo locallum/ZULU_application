@@ -101,6 +101,7 @@ app.get("/retrieve/population", async (req, res) => {
     });
     res.json(response.data);
   } catch (error) {
+    console.log(error)
     res.status(500).send("Error fetching data from population retrieval API");
   }
 });
@@ -113,6 +114,7 @@ app.get("/retrieve/traffic", async (req, res) => {
     });
     res.json(response.data);
   } catch (error) {
+    console.log(error)
     res.status(500).send("Error fetching data from population retrieval API");
   }
 });
