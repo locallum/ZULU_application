@@ -15,6 +15,7 @@ const populationRetrievalURL =
 const trafficRetrievalURL = "https://ga1wu9p0i0.execute-api.us-east-1.amazonaws.com/dev/"
 const visualisationURL =
   "https://ffkfzfk8t7.execute-api.us-east-1.amazonaws.com/dev/";
+const travelRetrievalURL = "https://nzukdmrh2b.execute-api.us-east-2.amazonaws.com/dev/";
 
 
 
@@ -113,6 +114,54 @@ app.get("/retrieve/traffic", async (req, res) => {
     res.json(response.data);
   } catch (error) {
     res.status(500).send("Error fetching data from population retrieval API");
+  }
+});
+
+app.get("/retrieve/travel/mode/suburbs", async (req, res) => {
+  const { suburbs } = req.query;
+  try {
+    const response = await axios.get(`${travelRetrievalURL}travel/mode/suburbs/v1`, {
+      params: { suburbs },
+    });
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).send("Error fetching data from household retrieval API");
+  }
+});
+
+app.get("/retrieve/travel/purpose/suburbs", async (req, res) => {
+  const { suburbs } = req.query;
+  try {
+    const response = await axios.get(`${travelRetrievalURL}travel/purpose/suburbs/v1`, {
+      params: { suburbs },
+    });
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).send("Error fetching data from household retrieval API");
+  }
+});
+
+app.get("/retrieve/travel/mode/top", async (req, res) => {
+  const { modes, limit } = req.query;
+  try {
+    const response = await axios.get(`${travelRetrievalURL}travel/mode/top/v1`, {
+      params: { modes, limit },
+    });
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).send("Error fetching data from household retrieval API");
+  }
+});
+
+app.get("/retrieve/travel/purpose/top", async (req, res) => {
+  const { purposes, limit } = req.query;
+  try {
+    const response = await axios.get(`${travelRetrievalURL}travel/purpose/top/v1`, {
+      params: { purposes, limit },
+    });
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).send("Error fetching data from household retrieval API");
   }
 });
 
