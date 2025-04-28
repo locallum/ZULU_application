@@ -1,4 +1,4 @@
-.background {
+.home-page {
     background-image: url(../home-img.png);
     background-size: cover;
     background-repeat: no-repeat;
@@ -7,27 +7,23 @@
 }
 
 table {
-    margin: auto;
+    margin: 0 auto;
     background-color: #D9D9D9;
     border: 1px solid ;
     border-collapse: collapse;
-    width: 550px;
+    text-align: center;
+    table-layout: fixed;
 }
 
 th {
     background-color: #00478F;
     color: white;
-    border: 1px solid ;
-    border-collapse: collapse;
-    padding: 15px;
-    text-align: center;
 }
 
-td {
-    padding: 15px;
-    text-align: left;
+th, td {
     border: 1px solid ;
     border-collapse: collapse;
+    padding: 3%;
     text-align: center;
 }
 
@@ -35,16 +31,13 @@ h2 {
     text-align: center;
 }
 
-* {
-    box-sizing: border-box;
-}
-
 .box {
     float: left;
     width: 33.33%;
-    padding: 20px;
+    padding: 4%;
     text-align: center;
     background-color: white;
+    display: table-cell;
 }
 
 img {
@@ -53,27 +46,30 @@ img {
     margin: auto;
 }
 
+.services-container {
+    background-color: white;
+    display: table;
+    width: 100%
+}
+
 .blurb-title {
     margin: 3%;
 }
 
 .data-container {
-    margin-top: 20px;
-}
-
-.data-title {
+    display: table;
+    width: 100%;
     background-color: #00478F;
     color: white;
-    padding: 15px;
 }
 
 .data-box {
     float: left;
     width: 33.33%;
-    padding: 20px;
+    padding: 4%;
     text-align: center;
-    background-color: #00478F;
-    color: white;
+    display: table-cell;
+    flex: 1;
 }
 
 .stat-container {
@@ -81,25 +77,30 @@ img {
 }
 
 .slideshow-container {
-  max-width: 1000px;
   position: static;
   margin: auto;
   background-color: white;
   padding-bottom: 3%;
+  display: table;
+}
+
+.slideshow-inner-container {
+    display: flex;
+    place-items: center;
+    justify-content: center;
+    position: static;
 }
 
 /* Next & previous buttons */
 .prev, .next {
   cursor: pointer;
   position: absolute;
-  top: 50%;
   width: auto;
-  margin-top: 350px;
-  padding: 16px;
+  padding: 2%;
   color: black;
   font-weight: bold;
-  font-size: 18px;
-  transition: 0.6s ease;
+  font-size: 200%;
+  transition: 1s ease;
   border-radius: 0 3px 3px 0;
   user-select: none;
 }
@@ -107,13 +108,13 @@ img {
 /* Position the "next button" to the right */
 .next {
   right: 0;
-  border-radius: 3px 0 0 3px;
-  margin-right: 200px;
+  border-radius: 2% 0 0 2%;
+  margin-right: 15%;
 }
 
 .prev {
     left: 0;
-    margin-left: 200px;
+    margin-left: 15%;
 }
 
 /* On hover, add a black background color with a little bit see-through */
