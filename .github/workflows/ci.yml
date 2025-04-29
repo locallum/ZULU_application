@@ -35,11 +35,11 @@ jobs:
     - name: Clean install backend dependencies
       run: cd backend && npm ci
 
-    - name: Clean install frontend dependencies
-      run: cd frontend && npm ci
-
     - name: Lint backend code
       run: cd backend && npm run lint
+    
+    - name: Clean install frontend dependencies
+      run: cd frontend && npm ci
     
     - name: Lint frontend code
       run: cd frontend && npm run lint
