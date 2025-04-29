@@ -1,8 +1,9 @@
-# This workflow will lint and build the React project.
+# This workflow will lint the React project.
 
 name: ZULU app CI
 
 on:
+  pull_request:
   push:
     branches:
       - dev
@@ -11,10 +12,6 @@ on:
 jobs:
   dev:
     runs-on: ubuntu-latest
-    # defaults:
-    #   run:
-    #     # Run all steps for this job in the frontend directory
-    #     working-directory: ./frontend
 
     steps:
     - name: Checkout code
@@ -34,14 +31,11 @@ jobs:
     - name: Clean install backend dependencies
       run: cd backend && npm ci
 
-    - name: Clean install frontend dependencies
-      run: cd frontend && npm ci
-
     - name: Lint backend code
       run: cd backend && npm run lint
     
+    - name: Clean install frontend dependencies
+      run: cd frontend && npm ci
+    
     - name: Lint frontend code
       run: cd frontend && npm run lint
-
-    - name: Build project
-      run: npm run dev
